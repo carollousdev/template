@@ -3,13 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class CI_Template extends CI_Controller
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
+    public $data;
     public function index()
     {
-        $this->load->view('Dashboard');
+        $this->data['dashboard'] = $this->dashboard->get(['id' => 1]);
+        $this->load->view('Dashboard', $this->data);
     }
 }
