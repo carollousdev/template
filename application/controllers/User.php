@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require APPPATH . '/core/CI_Template.php';
-class Dashboard extends CI_Template
+class User extends CI_Template
 {
 
     public function __construct()
@@ -11,7 +11,6 @@ class Dashboard extends CI_Template
 
     public function index()
     {
-        $this->data['content'] = 'masuk';
         parent::index();
     }
 }

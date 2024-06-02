@@ -29,7 +29,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex">
-                                <h1>THIS CONTENT</h1>
+                                <h1><?= $content ?></h1>
                             </div>
                         </div>
                     </div>
