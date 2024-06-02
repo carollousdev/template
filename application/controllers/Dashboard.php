@@ -11,7 +11,6 @@ class Dashboard extends CI_Template
 
     public function index()
     {
-        $this->data['content'] = 'masuk';
         parent::index();
     }
 }
