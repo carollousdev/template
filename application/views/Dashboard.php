@@ -24,12 +24,19 @@
                         <div class="card-header border-0">
                             <div class="d-flex justify-content-between">
                                 <h3 class="card-title">Title Content</h3>
-                                <a href="javascript:void(0);">Toolbars</a>
+                                <i class="fa-solid fa-file-arrow-down"></i>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="d-flex">
                                 <h1><?= $content ?></h1>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>

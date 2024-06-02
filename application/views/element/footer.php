@@ -11,6 +11,8 @@
 <!-- REQUIRED SCRIPTS -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/datatables/dataTables.min.js"></script>
+<script src="assets/template.js"></script>
 <!-- AdminLTE -->
 <script src="dist/js/adminlte.js"></script>
 <script src="plugins/chart.js/Chart.min.js"></script>
