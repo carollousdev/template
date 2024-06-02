@@ -1,3 +1,4 @@
+</div>
 <footer class="main-footer">
     <strong>Copyright &copy; 2024-2025 <a href="https://facebook.com/carolloux.dachi">Carollous Dachi</a>.</strong>
     All rights reserved.
