@@ -18,4 +18,13 @@ class CI_Template extends CI_Controller
         $this->data['content'] = $this->data['path'];
         $this->load->view($this->data['path'], $this->data);
     }
+
+    public function server_side()
+    {
+        $output = array(
+            "data" => 'masuk'
+        );
+
+        echo json_encode($output);
+    }
 }

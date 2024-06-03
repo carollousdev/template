@@ -4,23 +4,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <table id="myTable" class="display">
+                <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>No</th>
+                            <th>Name</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Carollous Dachi</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Paulus Dachi</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>

@@ -17,4 +17,10 @@ class My_model extends CI_Model
 
         return $this->db->get_where($this->table . " m", $where)->row();
     }
+
+    public function get_field_original()
+    {
+        $allfield = $this->db->list_fields($this->table);
+        return $allfield;
+    }
 }
