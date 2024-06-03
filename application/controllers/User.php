@@ -6,11 +6,12 @@ class User extends CI_Template
 
     public function __construct()
     {
-        parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME));
+        parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME), 1);
     }
 
     public function index()
     {
+        $this->data['hTable'] = $this->master->getHeaderName();
         parent::index();
     }
 }

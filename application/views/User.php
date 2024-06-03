@@ -5,16 +5,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <table id="myTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>No</th>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
+                    <?= $hTable ?>
                 </table>
             </div>
         </div>
