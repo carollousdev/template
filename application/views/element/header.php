@@ -7,10 +7,13 @@
     <title><?= $dashboard->title ?></title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="plugins/datatables/bootstrap5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/datatables/bootstrap5/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="plugins/datatables/dataTables.min.css">
 
 </head>
 
@@ -66,6 +69,10 @@
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>User</p>
                             </a>
+                            <a href="<?= base_url() . 'role' ?>" class="nav-link">
+                                <i class="nav-icon fas fa-lock"></i>
+                                <p>Role</p>
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -77,7 +84,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Dashboard v3</h1>
+                            <h1 class="m-0">Data <?= $path ?></h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">

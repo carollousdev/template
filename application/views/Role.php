@@ -16,9 +16,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Add data <?= ucfirst($path) ?></h4>
-                            <button class="close" data-dismiss="modal" type="button">
-                                ×
-                            </button>
+                            <button class="close" data-dismiss="modal" type="button">×</button>
                         </div>
                         <div class="modal-body">
                             <form id="form-add" method="post">

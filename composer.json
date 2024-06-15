@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"almasaeed2010/adminlte": "~3.1"
+		"almasaeed2010/adminlte": "~3.1",
+		"sqids/sqids": "*"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

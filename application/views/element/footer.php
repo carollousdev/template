@@ -11,14 +11,19 @@
 
 <!-- REQUIRED SCRIPTS -->
 <script src="plugins/jquery/jquery.min.js"></script>
+<!-- BOOTSTRAP5 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="plugins/datatables/dataTables.min.js"></script>
-<script src="assets/template.js"></script>
+<script src="plugins/datatables/bootstrap5/js/dataTables.js"></script>
+<script src="plugins/datatables/bootstrap5/js/dataTables.bootstrap5.js"></script>
+
+
 <!-- AdminLTE -->
 <script src="dist/js/adminlte.js"></script>
-<script src="plugins/chart.js/Chart.min.js"></script>
 <script src="dist/js/demo.js"></script>
-<script src="dist/js/pages/dashboard3.js"></script>
+<script src="plugins/chart.js/Chart.min.js"></script>
+
+<!-- TEMPLATE JS -->
+<script src="assets/js/template.js"></script>
 </body>
 
 </html>
