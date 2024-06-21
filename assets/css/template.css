@@ -10,3 +10,16 @@ div.dataTables_wrapper {
 tr.highlight {
 	font-weight: bold;
 }
+.btn-appsd {
+	border-radius: 3px;
+	background-color: #f8f9fa;
+	border: 1px solid #ddd;
+	color: #6c757d;
+	font-size: 12px;
+	height: 60px;
+	margin: 0 0 10px 10px;
+	min-width: 80px;
+	padding: 15px 5px;
+	position: relative;
+	text-align: center;
+}

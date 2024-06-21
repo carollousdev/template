@@ -106,6 +106,7 @@ class My_model extends CI_Model
             $result .= '<button data-id="' . $id . '" class="btn btn-primary edit">Edit</button>';
             $result .= '</form>';
             $result .= '<button data-id="' . $id . '" class="btn btn-danger delete">Delete</button>';
+            $result .= '<button data-id="' . $id . '" class="btn btn-warning permission">Permission</button>';
             $result .= '</div>';
             $result .= '</div></div>';
         }

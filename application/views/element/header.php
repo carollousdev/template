@@ -51,7 +51,7 @@
                         <img src="http://localhost:8080/template/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Carollous Dachi</a>
+                        <a href="#" class="d-block"><?= $_SESSION['name'] ?></a>
                     </div>
                 </div>
 
@@ -79,6 +79,13 @@
                             <a href="<?= base_url() . 'role' ?>" class="nav-link">
                                 <i class="nav-icon fas fa-lock"></i>
                                 <p>Role</p>
+                            </a>
+                        </li>
+                        <br />
+                        <li class="nav-item">
+                            <a href="<?= base_url() . 'logout' ?>" class="nav-link">
+                                <i class="nav-icon fas fa-reguler fa-arrow-right"></i>
+                                <p>Logout</p>
                             </a>
                         </li>
                     </ul>
