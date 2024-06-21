@@ -12,7 +12,7 @@ class CI_Template extends CI_Controller
     public function __construct($path = "", $page_info = null, $join_database = array())
     {
         parent::__construct();
-        $this->load->library(['encrypt', 'encryption', 'form_validation', 'user_agent']);
+        $this->load->library(['encrypt', 'encryption', 'form_validation', 'user_agent', 'session']);
 
         $this->data = $_POST;
         $this->data['path'] = $path;
