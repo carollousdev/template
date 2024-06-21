@@ -7,7 +7,5 @@ class User extends CI_Template
     public function __construct()
     {
         parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME), 1);
-        $this->data['enable_add'] = ['password'];
-        $this->data['enable_edit'] = ['password'];
     }
 }

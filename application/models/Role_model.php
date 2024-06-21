@@ -8,5 +8,8 @@ class Role_model extends My_model
         parent::__construct();
         $CI = &get_instance();
         $this->table = "role";
+        $this->rules = [
+            'short_name' => 'required|max_length[10]|is_unique[role.short_name]|alpha',
+        ];
     }
 }

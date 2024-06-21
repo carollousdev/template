@@ -8,5 +8,9 @@ class User_model extends My_model
         parent::__construct();
         $CI = &get_instance();
         $this->table = "user";
+        $this->rules = [
+            'username' => 'required|min_length[5]|max_length[25]|is_unique[user.username]|alpha_numeric',
+            'password' => 'trim|required|min_length[8]'
+        ];
     }
 }

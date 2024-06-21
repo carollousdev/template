@@ -1,92 +1,14 @@
-var url = window.location.pathname;
-var parts = url.split("/");
+var parts = window.location.pathname.split("/");
 var link = parts[parts.length - 1];
 var columnDefsVal = [
 	{
-		orderable: false,
-		targets: [-1],
-		width: "100px",
-	},
-	{
-		orderable: false,
-		targets: [0],
-		width: "70px",
-	},
+		targets: -1,
+		visible: true,
+		width: '100px'
+	}
 ];
 
-$(function () {
-	$("#btn_add").on("click", function () {
-		$.ajax({
-			url: link + "/addModal",
-			type: "POST",
-			dataType: "json",
-			success: function (response) {
-				$("#addModal").modal("show");
-				$("#form-field-add").html(response.data);
-			},
-		});
-	});
-});
-
-submitData();
-function submitData() {
-	$("#btn_submit").on("click", function () {
-		var data = $("#form-add").serialize();
-		$.ajax({
-			url: link + "/add",
-			type: "POST",
-			dataType: "json",
-			data: data,
-			success: function (output) {
-				if (output.response == 'success') {
-					$("#addModal").modal("hide");
-					$("#myTable").DataTable().ajax.reload(null, false);
-				} else {
-					$.each(output.error, function (index, value) {
-						if (value !== 'false') {
-							$('.' + index).text(value);
-							$('#' + index).addClass('is-invalid');
-						} else {
-							$('#' + index).removeClass('is-invalid');
-							$('.' + index).empty();
-						}
-					});
-				}
-			},
-		});
-	});
-}
-
-$("#myTable").on("click", ".btn_edit", function () {
-	var id = $(this).attr("data-id");
-	$.ajax({
-		url: link + "/editModal",
-		type: "POST",
-		data: {
-			id: id,
-		},
-		dataType: "json",
-		success: function (response) {
-			$("#editModal").modal("show");
-			$("#form-field-edit").html(response.data);
-		},
-	});
-});
-
-$("#btn_edit_submit").on("click", function () {
-	$.ajax({
-		url: link + "/edit",
-		type: "POST",
-		dataType: "json",
-		data: $("#form-edit").serializeArray(),
-		success: function (response) {
-			$("#editModal").modal("hide");
-			$("#myTable").DataTable().ajax.reload(null, false);
-		},
-	});
-});
-
-$("#myTable").on("click", ".btn_delete", function () {
+$("#myTable").on("click", ".delete", function () {
 	var id = $(this).attr("data-id");
 	$.ajax({
 		url: link + "/delete",
@@ -104,18 +26,27 @@ $("#myTable").on("click", ".btn_delete", function () {
 showDataTables();
 function showDataTables() {
 	$("#myTable").DataTable({
+		scrollCollapse: true,
+		scrollY: '50vh',
+		scrollX: '100%',
 		processing: true,
 		serverSide: true,
-		autoWidth: false,
-		responsive: true,
-		scrollCollapse: true,
-		info: true,
-		orderable: true,
+		autoWidth: true,
+		responsive: false,
+		info: false,
+		paging: true,
 		lengthChange: true,
 		ajax: {
 			url: link + "/server_side",
 			type: "POST",
+		}, initComplete: function (settings, json) {
+
+		},
+		fixedColumns: {
+			start: 1,
+			end: 1
 		},
 		columnDefs: columnDefsVal,
 	});
 }
+$(".form-select").select2();

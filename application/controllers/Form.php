@@ -9,27 +9,13 @@ class Form extends CI_Controller
         $this->load->library('form_validation');
     }
 
-    function index()
+    function test()
     {
-        $this->load->view('v_form');
-    }
-
-    function aksi()
-    {
-        $this->form_validation->set_rules(
-            'name',
-            'name',
-            'required|min_length[5]|is_unique[user.name]',
-            array(
-                'required'      => 'You have not provided %s.',
-                'is_unique'     => 'This %s already exists.'
-            )
+        $data = 'masuk';
+        $output = array(
+            "data" => $data
         );
 
-        if ($this->form_validation->run() != false) {
-            echo "Form validation oke";
-        } else {
-            $this->load->view('v_form');
-        }
+        echo json_encode($output);
     }
 }

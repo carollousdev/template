@@ -7,8 +7,11 @@ class My_model extends CI_Model
     public $column_search = ["name"];
     public $column_order = [];
     public $disable = [];
+    public $add_field = [];
+    public $button = ['edit' => 'success', 'delete' => 'danger', 'add' => 'primary'];
+    public $rules = [];
 
-    public function add($data)
+    public function create($data)
     {
         return $this->db->insert($this->table, $data);
     }
@@ -27,7 +30,7 @@ class My_model extends CI_Model
         }
     }
 
-    public function get($where = "", $order = "")
+    public function get($where = array(), $order = "")
     {
         if (empty($where)) {
             $where = array("status" => 0);
@@ -38,6 +41,26 @@ class My_model extends CI_Model
         }
 
         return $this->db->get_where($this->table . " m", $where)->row();
+    }
+
+    public function gets($where = "", $like = array(), $order = "", $group = "")
+    {
+        if (empty($where)) {
+            $where = array("m.status" => 0);
+        }
+
+        $this->db->like($like);
+
+        if (!empty($order)) {
+            $this->db->order_by($order[0], $order[1]);
+        }
+
+        if (!empty($group)) {
+            $this->db->group_by($group);
+        }
+
+        $query = $this->db->get_where($this->table . " m", $where);
+        return $query->result();
     }
 
     function generateRandomString($length)
@@ -58,15 +81,51 @@ class My_model extends CI_Model
         return $code . $rand_id . time();
     }
 
+    public function validatePassword($password, $key = 0)
+    {
+        if (empty($key)) {
+            $data['create_key'] = bin2hex($this->encryption->create_key(5));
+            $data['password'] = $this->encrypt->encode($password, $data['create_key']);
+            return $data;
+        } else {
+            $query = $this->master->get(['id' => $key]);
+            $data = $this->encrypt->decode($password, $query->create_key);
+            return $data;
+        }
+    }
 
-    public function get_field_original($param = array())
+    public function actionButton($id, $method = array())
+    {
+        $result = "";
+        if (empty($method)) {
+            $result .= '<div class="row">';
+            $result .= '<div class="col">';
+            $result .= '<div class="btn-group">';
+            $result .= '<form action="http://localhost:8080/template/' . $this->table . '/edit" method="post" accept-charset="utf-8">';
+            $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+            $result .= '<button data-id="' . $id . '" class="btn btn-primary edit">Edit</button>';
+            $result .= '</form>';
+            $result .= '<button data-id="' . $id . '" class="btn btn-danger delete">Delete</button>';
+            $result .= '</div>';
+            $result .= '</div></div>';
+        }
+        return $result;
+    }
+
+    function validate_config($key)
+    {
+        !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'trim|required|min_length[4]|max_length[25]|alpha_numeric_spaces';
+        return $result;
+    }
+
+    public function get_field_original()
     {
         $allfield = $this->db->list_fields($this->table);
         $res = ['action'];
         $res = array_merge($allfield, $res);
-        $disable = array_merge($this->disable, ["password", "create_key", "create_date", "status"]);
+        $disable = array_merge($this->disable, ["create_key", "create_date", "status"]);
         $res = array_reverse(array_reverse(array_diff($res, $disable)));
-        $res = array_merge($param, $res);
+
         return $res;
     }
 
@@ -139,27 +198,40 @@ class My_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    public function actionButton($id)
+    public function create_form($error = array())
     {
         $result = "";
-        $array = ['edit' => 'primary', 'delete' => 'danger'];
-        foreach ($array as $key => $value) {
-            $result .= '<button data-id="' . $id . '" class="mt-1 btn btn-' . $value . ' btn_' . $key . ' form-control">' . ucfirst($key) . '</button>';
-        }
-        return $result;
-    }
-
-    public function add_form($enable_add = array())
-    {
-        $result = "";
-        $get_field_form = $this->master->get_field_original($enable_add);
+        $get_field_form = $this->master->get_field_original();
         $fields = $this->db->field_data($this->table);
         foreach ($fields as $key => $value) {
             if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
+                in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
                 if ($check_character = explode('_', $value->name)) {
-                    $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                    $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control" type="text" required>';
-                    $result .= '<div class="invalid-feedback ' . $value->name . '"></div>';
+                    if ($value->name == 'password') {
+                        $result .= '<div class="col">';
+                        $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
+                        $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="password" value="' . set_value($value->name) . '" required>';
+                        $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
+                        $result .= '</div>';
+                    } else {
+                        if ($this->db->table_exists($value->name)) {
+                            $name_role = $value->name;
+                            $result .= '<div class="col">';
+                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
+                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '" data-placeholder="Choose one thing">';
+                            foreach ($this->$name_role->gets() as $key => $val) {
+                                $result .= '<option value="' . $val->id . '">' . $val->name . '</option>';
+                            }
+                            $result .= '</select>';
+                            $result .= '</div>';
+                        } else {
+                            $result .= '<div class="col">';
+                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '" required>';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
+                            $result .= '</div>';
+                        }
+                    }
                 };
             }
         }
@@ -167,39 +239,48 @@ class My_model extends CI_Model
         return $result;
     }
 
-    public function edit_form($id, $enable_edit = array())
+    public function edit_form($id, $error = array())
     {
         $result = "";
         $sql = $this->master->get(['id' => $this->encrypt->decode($id)]);
-        $get_field_form = $this->master->get_field_original($enable_edit);
+        $get_field_form = $this->master->get_field_original();
         foreach ($sql as $key => $value) {
             if (in_array($key, $get_field_form)) {
+                in_array($key, $error) ? $isError = 'is-invalid' : $isError = '';
                 if ($key == "id") {
                     $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
                 } else {
-                    $result .= '<label>' . ucfirst($key) . '</label>';
+                    $result .= '<div class="col">';
                     if ($key == 'password') {
-                        $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control" type="password" value="defaultpassword">';
+                        !empty(set_value($key)) ? $value = set_value($key) : $value = $this->encrypt->decode($value, $sql->create_key);
+                        $result .= '<label class="form-label">' . ucwords($key) . '</label>';
+                        $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="password" value="' . $value . '" required>';
+                        $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
                     } else {
-                        $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control" type="text" value="' . $value . '">';
+                        if ($this->db->table_exists($key)) {
+                            $name_role = $key;
+                            $result .= '<div class="col">';
+                            $result .= '<label>' . ucwords(implode(" ", explode('_', $key))) . '</label>';
+                            $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '" data-placeholder="Choose one thing">';
+                            foreach ($this->$name_role->gets() as $k => $val) {
+                                $val->id == $value ? $selected = "selected" : $selected = "";
+                                $result .= '<option value="' . $val->id . '" ' . $selected . '>' . $val->name . '</option>';
+                            }
+                            $result .= '</select>';
+                            $result .= '</div>';
+                        } else {
+                            if ($check_character = explode('_', $key)) {
+                                !empty(set_value($key)) ? $value = set_value($key) : $value;
+                                $result .= '<label  class="form-label">' . ucwords(implode(" ", $check_character)) . '</label>';
+                                $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="text" value="' . $value . '" required>';
+                                $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
+                            };
+                        }
                     }
+                    $result .= '</div>';
                 }
             }
         }
-        return $result;
-    }
-
-    public function hash_password($password)
-    {
-        $timeTarget = 0.350;
-        $cost = 10;
-        do {
-            $cost++;
-            $start = microtime(true);
-            $result = password_hash($password, PASSWORD_BCRYPT, ["cost" => $cost]);
-            $end = microtime(true);
-        } while (($end - $start) < $timeTarget);
-
         return $result;
     }
 }

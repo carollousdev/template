@@ -10,20 +10,24 @@
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-<script src="plugins/jquery/jquery.min.js"></script>
+<script src="http://localhost:8080/template/plugins/jquery/jquery.min.js"></script>
 <!-- BOOTSTRAP5 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="plugins/datatables/bootstrap5/js/dataTables.js"></script>
-<script src="plugins/datatables/bootstrap5/js/dataTables.bootstrap5.js"></script>
+<script src="http://localhost:8080/template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/dataTables.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/dataTables.bootstrap5.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/dataTables.fixedColumns.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/fixedColumns.bootstrap5.js"></script>
 
+<script src="http://localhost:8080/template/plugins/select2/js/select2.min.js"></script>
 
 <!-- AdminLTE -->
-<script src="dist/js/adminlte.js"></script>
-<script src="dist/js/demo.js"></script>
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="http://localhost:8080/template/plugins/chart.js/Chart.min.js"></script>
+<script src="http://localhost:8080/template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="http://localhost:8080/template/dist/js/adminlte.js"></script>
+<script src="http://localhost:8080/template/dist/js/demo.js"></script>
 
 <!-- TEMPLATE JS -->
-<script src="assets/js/template.js"></script>
+<script src="http://localhost:8080/template/assets/js/template.js"></script>
 </body>
 
 </html>
