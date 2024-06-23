@@ -99,7 +99,6 @@ class CI_Template extends CI_Controller
             }
         }
 
-
         $this->data['form'] = $this->master->create_form($error);
         $this->load->view('element/form', $this->data);
     }
@@ -148,24 +147,33 @@ class CI_Template extends CI_Controller
         echo json_encode($result);
     }
 
+    public function get_data()
+    {
+        $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
+        $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
+
+        echo json_encode($data);
+    }
+
     public function optionData()
     {
-        $search = "";
-        if (!empty($_GET['type']) && $_GET['type'] == 'user_search') {
-            $search_term = !empty($_GET['search']) ? $_GET['search'] : '';
 
-            // Fetch matched data from the database  
-        }
-        $sql = $this->master->gets("", ['name' => $search_term]);
-
-        $usersData = array();
-        foreach ($sql as $qey => $value) {
-            $data['id'] = $value['id'];
-            $data['text'] = $value['name'];
-            array_push($usersData, $data);
+        $search_term = "";
+        $data = array();
+        foreach ($_GET['term'] as $key => $value) {
+            if ($key == 'term') {
+                $search_term = $value;
+            }
         }
 
-        // Return results as json encoded array  
+        $query = $this->role->gets("", ['name' => $search_term]);
+
+        $usersData['result'] = array();
+        foreach ($query as $key => $value) {
+            $data['id'] = $value->id;
+            $data['text'] = $value->name;
+            array_push($usersData['result'], $data);
+        }
         echo json_encode($usersData);
     }
 }

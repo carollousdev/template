@@ -219,7 +219,7 @@ class My_model extends CI_Model
                             $name_role = $value->name;
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '" data-placeholder="Choose one thing">';
+                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
                             foreach ($this->$name_role->gets() as $key => $val) {
                                 $result .= '<option value="' . $val->id . '">' . $val->name . '</option>';
                             }
@@ -263,10 +263,10 @@ class My_model extends CI_Model
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", explode('_', $key))) . '</label>';
                             $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '" data-placeholder="Choose one thing">';
-                            foreach ($this->$name_role->gets() as $k => $val) {
-                                $val->id == $value ? $selected = "selected" : $selected = "";
-                                $result .= '<option value="' . $val->id . '" ' . $selected . '>' . $val->name . '</option>';
-                            }
+                            // foreach ($this->$name_role->gets() as $k => $val) {
+                            //     $val->id == $value ? $selected = "selected" : $selected = "";
+                            //     $result .= '<option value="' . $val->id . '" ' . $selected . '>' . $val->name . '</option>';
+                            // }
                             $result .= '</select>';
                             $result .= '</div>';
                         } else {

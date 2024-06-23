@@ -49,4 +49,35 @@ function showDataTables() {
 		columnDefs: columnDefsVal,
 	});
 }
-$(".form-select").select2();
+
+$(".form-select").select2({
+	ajax: {
+		url: "http://localhost:8080/template/user/optionData",
+		dataType: 'json',
+		data: function (term) {
+			return {
+				term: term,
+				id: $("#id").val()
+			};
+		},
+		processResults: function (data) {
+			return {
+				results: data.result
+			};
+		}
+	}
+});
+
+var studentSelect = $('.form-select');
+$.ajax({
+	url: "http://localhost:8080/template/user/get_data",
+	type: "POST",
+	dataType: "json",
+	data: {
+		id: $("#id").val()
+	},
+	success: function (response) {
+		var option = new Option(response.name, response.id, true, true);
+		studentSelect.append(option).trigger('change');
+	},
+});

@@ -81,7 +81,10 @@
                                 <p>Role</p>
                             </a>
                         </li>
-                        <br />
+                    </ul>
+                </nav>
+                <nav class="mt-2" style="position: absolute;bottom: 0;">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                         <li class="nav-item">
                             <a href="<?= base_url() . 'logout' ?>" class="nav-link">
                                 <i class="nav-icon fas fa-reguler fa-arrow-right"></i>
