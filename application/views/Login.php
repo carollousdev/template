@@ -27,22 +27,24 @@
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <?php echo form_open('login/auth'); ?>
+                <?php echo form_open('login'); ?>
                 <div class="input-group mb-3">
-                    <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+                    <input type="text" name="username" id="username" class="form-control <?= !empty($is_invalid['username']) ? $is_invalid['username'] : '' ?>" placeholder="Username" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
                         </div>
                     </div>
+                    <?= form_error('username', '<div class="invalid-feedback">', '</div>'); ?>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" id="password" class="form-control <?= !empty($is_invalid['password']) ? $is_invalid['password'] : '' ?>" placeholder="Password" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
+                    <?= form_error('password', '<div class="invalid-feedback">', '</div>') ?>
                 </div>
                 <div class="row">
                     <!-- /.col -->

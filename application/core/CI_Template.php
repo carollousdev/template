@@ -150,8 +150,11 @@ class CI_Template extends CI_Controller
 
     public function get_data()
     {
-        $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
-        $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
+        $data = array();
+        if (!empty($_POST['id0'])) {
+            $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
+            $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
+        }
 
         echo json_encode($data);
     }

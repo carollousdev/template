@@ -11,6 +11,7 @@ class My_model extends CI_Model
     public $button = ['edit' => 'primary', 'delete' => 'danger', 'create' => 'primary', 'permission' => 'warning'];
     public $method = [];
     public $rules = [];
+    public $errorMessage = [];
 
     public function create($data)
     {
@@ -101,6 +102,13 @@ class My_model extends CI_Model
     function validate_config($key)
     {
         !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'trim|required|min_length[4]|max_length[25]|alpha_numeric_spaces';
+        return $result;
+    }
+
+    function validate_error_message($key)
+    {
+        $result = $this->errorMessage[$key];
+
         return $result;
     }
 
