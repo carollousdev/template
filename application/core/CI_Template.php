@@ -143,8 +143,9 @@ class CI_Template extends CI_Controller
 
     public function delete()
     {
-        $result = $this->master->delete(['id' => $this->encrypt->decode($_POST['id'])]);
-        echo json_encode($result);
+        if ($this->master->delete(['id' => $this->encrypt->decode($_POST['id'])])) {
+            redirect($this->data['path']);
+        }
     }
 
     public function get_data()

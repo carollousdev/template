@@ -11,5 +11,6 @@ class Role_model extends My_model
         $this->rules = [
             'short_name' => 'required|max_length[10]|is_unique[role.short_name]|alpha',
         ];
+        $this->method = ['permission'];
     }
 }

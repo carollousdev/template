@@ -8,21 +8,6 @@ var columnDefsVal = [
 	}
 ];
 
-$("#myTable").on("click", ".delete", function () {
-	var id = $(this).attr("data-id");
-	$.ajax({
-		url: link + "/delete",
-		type: "POST",
-		dataType: "json",
-		data: {
-			id: id,
-		},
-		success: function (response) {
-			$("#myTable").DataTable().ajax.reload(null, false);
-		},
-	});
-});
-
 showDataTables();
 function showDataTables() {
 	$("#myTable").DataTable({

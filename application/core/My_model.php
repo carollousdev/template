@@ -8,7 +8,8 @@ class My_model extends CI_Model
     public $column_order = [];
     public $disable = [];
     public $add_field = [];
-    public $button = ['edit' => 'success', 'delete' => 'danger', 'add' => 'primary'];
+    public $button = ['edit' => 'primary', 'delete' => 'danger', 'create' => 'primary', 'permission' => 'warning'];
+    public $method = [];
     public $rules = [];
 
     public function create($data)
@@ -81,35 +82,19 @@ class My_model extends CI_Model
         return $code . $rand_id . time();
     }
 
-    public function validatePassword($password, $key = 0)
-    {
-        if (empty($key)) {
-            $data['create_key'] = bin2hex($this->encryption->create_key(5));
-            $data['password'] = $this->encrypt->encode($password, $data['create_key']);
-            return $data;
-        } else {
-            $query = $this->master->get(['id' => $key]);
-            $data = $this->encrypt->decode($password, $query->create_key);
-            return $data;
-        }
-    }
-
-    public function actionButton($id, $method = array())
+    public function actionButton($id)
     {
         $result = "";
-        if (empty($method)) {
-            $result .= '<div class="row">';
-            $result .= '<div class="col">';
-            $result .= '<div class="btn-group">';
-            $result .= '<form action="http://localhost:8080/template/' . $this->table . '/edit" method="post" accept-charset="utf-8">';
+        $method = array_merge(['edit', 'delete'], $this->method);
+        $result .= '<div class="btn-group">';
+        foreach ($method as $key => $value) {
+            $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
             $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
-            $result .= '<button data-id="' . $id . '" class="btn btn-primary edit">Edit</button>';
+            $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
             $result .= '</form>';
-            $result .= '<button data-id="' . $id . '" class="btn btn-danger delete">Delete</button>';
-            $result .= '<button data-id="' . $id . '" class="btn btn-warning permission">Permission</button>';
-            $result .= '</div>';
-            $result .= '</div></div>';
         }
+        $result .= '</div>';
+
         return $result;
     }
 
