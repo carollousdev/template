@@ -13,6 +13,7 @@ class Navigation_model extends My_model
             'link' => 'trim|required',
             'type' => 'trim|required'
         ];
+        $this->change_value = ['type' => ['Root', 'Master', 'Singe']];
     }
 
     public function sidebar()

@@ -52,7 +52,9 @@ class CI_Template extends CI_Controller
                             if ($val == 'action') {
                                 $row[] = $this->master->actionButton($this->encrypt->encode($value->id));
                             } else {
-                                $row[] = $value->$val;
+                                if (!empty($this->master->change_value[$val])) {
+                                    $row[] = $this->master->change_value[$val][$value->$val];
+                                } else $row[] = $value->$val;
                             }
                         }
                     }

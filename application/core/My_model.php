@@ -12,6 +12,7 @@ class My_model extends CI_Model
     public $method = [];
     public $rules = [];
     public $errorMessage = [];
+    public $change_value = [];
 
     public function create($data)
     {
