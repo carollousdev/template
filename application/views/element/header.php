@@ -68,19 +68,7 @@
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                        <li class="nav-header">DATA MASTER</li>
-                        <li class="nav-item">
-                            <a href="<?= base_url() . 'user' ?>" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>User</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url() . 'role' ?>" class="nav-link">
-                                <i class="nav-icon fas fa-lock"></i>
-                                <p>Role</p>
-                            </a>
-                        </li>
+                        <?= $sidebar ?>
                     </ul>
                 </nav>
                 <nav class="mt-2" style="position: absolute;bottom: 0;">

@@ -45,13 +45,11 @@ class My_model extends CI_Model
         return $this->db->get_where($this->table . " m", $where)->row();
     }
 
-    public function gets($where = "", $like = array(), $order = "", $group = "")
+    public function gets($where = "", $like = array(), $order = array(), $group = "")
     {
         if (empty($where)) {
             $where = array("m.status" => 0);
         }
-
-        $this->db->like($like);
 
         if (!empty($order)) {
             $this->db->order_by($order[0], $order[1]);
@@ -61,19 +59,9 @@ class My_model extends CI_Model
             $this->db->group_by($group);
         }
 
+        $this->db->like($like);
         $query = $this->db->get_where($this->table . " m", $where);
         return $query->result();
-    }
-
-    function generateRandomString($length)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function getLastId($code = "")
@@ -81,35 +69,6 @@ class My_model extends CI_Model
         empty($code) ? $code = strtoupper(substr($this->table, 0, 2) . substr($this->table, -1, 1)) : $code;
         $rand_id = $this->generateRandomString(5);
         return $code . $rand_id . time();
-    }
-
-    public function actionButton($id)
-    {
-        $result = "";
-        $method = array_merge(['edit', 'delete'], $this->method);
-        $result .= '<div class="btn-group">';
-        foreach ($method as $key => $value) {
-            $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
-            $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
-            $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
-            $result .= '</form>';
-        }
-        $result .= '</div>';
-
-        return $result;
-    }
-
-    function validate_config($key)
-    {
-        !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'trim|required|min_length[4]|max_length[25]|alpha_numeric_spaces';
-        return $result;
-    }
-
-    function validate_error_message($key)
-    {
-        $result = $this->errorMessage[$key];
-
-        return $result;
     }
 
     public function get_field_original()
@@ -134,6 +93,54 @@ class My_model extends CI_Model
         }
         $TableHeader .= "</tr></thead>";
         return $TableHeader;
+    }
+
+    public function generateRandomString($length)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function changeColumnValue()
+    {
+    }
+
+    public function actionButton($id)
+    {
+        $result = "";
+        $method = array_merge(['edit', 'delete'], $this->method);
+        $result .= '<div class="btn-group">';
+        foreach ($method as $key => $value) {
+            $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
+            $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+            $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
+            $result .= '</form>';
+        }
+        $result .= '</div>';
+
+        return $result;
+    }
+
+    public function validate_config($key)
+    {
+        !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'trim|required|min_length[4]|max_length[25]|alpha_numeric_spaces';
+        return $result;
+    }
+
+    public function validate_error_message($key)
+    {
+        $result = $this->errorMessage[$key];
+
+        return $result;
+    }
+
+    public function optionData()
+    {
     }
 
     private function _get_data_query()
@@ -256,10 +263,6 @@ class My_model extends CI_Model
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", explode('_', $key))) . '</label>';
                             $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '" data-placeholder="Choose one thing">';
-                            // foreach ($this->$name_role->gets() as $k => $val) {
-                            //     $val->id == $value ? $selected = "selected" : $selected = "";
-                            //     $result .= '<option value="' . $val->id . '" ' . $selected . '>' . $val->name . '</option>';
-                            // }
                             $result .= '</select>';
                             $result .= '</div>';
                         } else {

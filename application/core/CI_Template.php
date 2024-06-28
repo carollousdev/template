@@ -23,6 +23,7 @@ class CI_Template extends CI_Controller
         } else $this->load->model("dashboard_model", "master");
 
         $this->data['dashboard'] = $this->dashboard->get(['id' => 1]);
+        $this->data['sidebar'] = $this->navigation->sidebar();
     }
 
     public function index()
