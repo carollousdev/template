@@ -35,6 +35,11 @@ function showDataTables() {
 	});
 }
 
+function call_option(name) {
+	console.log(name);
+}
+
+var studentSelect = $('.form-select');
 $(".form-select").select2({
 	ajax: {
 		url: "http://localhost:8080/template/user/optionData",
@@ -49,7 +54,7 @@ $(".form-select").select2({
 			return {
 				results: data.result
 			};
-		}
+		},
 	}
 });
 
@@ -62,7 +67,9 @@ $.ajax({
 		id: $("#id").val()
 	},
 	success: function (response) {
-		var option = new Option(response.name, response.id, true, true);
-		studentSelect.append(option).trigger('change');
+		if (response.response == true) {
+			var option = new Option(response.data.name, response.data.id, true, true);
+			studentSelect.append(option).trigger('change');
+		}
 	},
 });

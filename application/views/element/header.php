@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $dashboard->title ?></title>
 
+    <link rel="icon" type="image/x-icon" href="http://localhost:8080/template/dist/img/AdminLTELogo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/datatables/bootstrap5/css/bootstrap.min.css">
@@ -14,7 +15,6 @@
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/select2/css/select2-bootstrap4.min.css">
 
-    <link rel="stylesheet" href="http://localhost:8080/template/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="http://localhost:8080/template/dist/css/adminlte.min.css">

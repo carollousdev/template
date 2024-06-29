@@ -221,9 +221,6 @@ class My_model extends CI_Model
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
                             $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
-                            foreach ($this->$name_role->gets() as $key => $val) {
-                                $result .= '<option value="' . $val->id . '">' . $val->name . '</option>';
-                            }
                             $result .= '</select>';
                             $result .= '</div>';
                         } else {
@@ -263,7 +260,7 @@ class My_model extends CI_Model
                             $name_role = $key;
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", explode('_', $key))) . '</label>';
-                            $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '" data-placeholder="Choose one thing">';
+                            $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '">';
                             $result .= '</select>';
                             $result .= '</div>';
                         } else {

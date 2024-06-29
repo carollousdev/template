@@ -22,12 +22,12 @@
 
 <!-- AdminLTE -->
 <script src="http://localhost:8080/template/plugins/chart.js/Chart.min.js"></script>
-<script src="http://localhost:8080/template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <script src="http://localhost:8080/template/dist/js/adminlte.js"></script>
 <script src="http://localhost:8080/template/dist/js/demo.js"></script>
 
 <!-- TEMPLATE JS -->
 <script src="http://localhost:8080/template/assets/js/template.js"></script>
+<?= $js ?>
 </body>
 
 </html>
