@@ -1,1 +1,1 @@
-call_option('masuk');
+call_option(['type', 'root']);

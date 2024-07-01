@@ -8,6 +8,7 @@ class CI_Template extends CI_Controller
     public $master;
     public $page_info;
     public $disable;
+    public $option;
 
     public function __construct($path = "", $page_info = null, $join_database = array())
     {
@@ -15,6 +16,7 @@ class CI_Template extends CI_Controller
         $this->load->library(['encrypt', 'encryption', 'form_validation', 'user_agent', 'session']);
 
         $this->data = $_POST;
+        $this->data['option'] = array();
         $this->data['path'] = $path;
         $this->data['js'] = '';
         $this->page_info = $page_info;
@@ -103,7 +105,7 @@ class CI_Template extends CI_Controller
             }
         }
 
-        $this->data['form'] = $this->master->create_form($error);
+        $this->data['form'] = $this->master->create_form($error, $this->option);
         $this->load->view('element/form', $this->data);
     }
 
@@ -152,28 +154,27 @@ class CI_Template extends CI_Controller
         }
     }
 
-    public function get_data()
-    {
-        $data = array();
-        $response = false;
+    // public function get_data()
+    // {
+    //     $data = array();
+    //     $response = false;
 
-        if (!empty($_POST['id'])) {
-            $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
-            $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
-            $response = true;
-        }
+    //     if (!empty($_POST['id'])) {
+    //         $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
+    //         $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
+    //         $response = true;
+    //     }
 
-        $output = array(
-            'data' => $data,
-            'response' => $response
-        );
+    //     $output = array(
+    //         'data' => $data,
+    //         'response' => $response
+    //     );
 
-        echo json_encode($output);
-    }
+    //     echo json_encode($output);
+    // }
 
     public function optionData()
     {
-
         $search_term = "";
         $data = array();
         foreach ($_GET['term'] as $key => $value) {
@@ -182,16 +183,16 @@ class CI_Template extends CI_Controller
             }
         }
 
-        $query = $this->role->gets("", ['name' => $search_term]);
-        !empty($_GET['id']) ? $selected = $this->master->get(['id' => $this->encrypt->decode($_GET['id'])])->role : $selected = "";
-
         $usersData['result'] = array();
-        foreach ($query as $key => $value) {
-            $data['id'] = $value->id;
-            $data['text'] = $value->name;
-            $data['selected'] = 'selected';
-            array_push($usersData['result'], $data);
-        }
+
+        // $data['id'] = $key;
+        // $data['text'] = $value;
+        // array_push($usersData['result'], $data);
+
+        // !empty($_GET['id']) ? $selected = $this->master->get(['id' => $this->encrypt->decode($_GET['id'])])->role : $selected = "";
+
+        // var_dump($usersData);
+
         echo json_encode($usersData);
     }
 }

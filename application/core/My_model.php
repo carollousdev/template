@@ -13,6 +13,7 @@ class My_model extends CI_Model
     public $rules = [];
     public $errorMessage = [];
     public $change_value = [];
+    public $option = [];
 
     public function create($data)
     {
@@ -107,8 +108,25 @@ class My_model extends CI_Model
         return $randomString;
     }
 
-    public function changeColumnValue()
+    public function change_option($data = array(), $type = null)
     {
+        $array = array();
+        $result = array();
+        if ($type == 0) {
+            foreach ($data as $key => $value) {
+                $array['id'] = $key;
+                $array['text'] = $value;
+                array_push($result, $array);
+            }
+        } else {
+            foreach ($data as $key => $value) {
+                $array['id'] = $value->id;
+                $array['text'] = $value->name;
+            }
+            array_push($result, $array);
+        }
+
+        return $result;
     }
 
     public function actionButton($id)
@@ -200,7 +218,7 @@ class My_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    public function create_form($error = array())
+    public function create_form($error = array(), $option = array())
     {
         $result = "";
         $get_field_form = $this->master->get_field_original();
@@ -217,10 +235,23 @@ class My_model extends CI_Model
                         $result .= '</div>';
                     } else {
                         if ($this->db->table_exists($value->name)) {
-                            $name_role = $value->name;
+                            $field = $value->name;
+                            $array = $this->$field->gets();
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
                             $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
+                            foreach ($array as $k => $val) {
+                                $result .= '<option value="' . $val->id . '">' . $val->name . '</option>';
+                            }
+                            $result .= '</select>';
+                            $result .= '</div>';
+                        } else if (!empty($option[$value->name])) {
+                            $result .= '<div class="col">';
+                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
+                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
+                            foreach ($option[$value->name] as $q => $qval) {
+                                $result .= '<option value="' . $qval['id'] . '">' . $qval['text'] . '</option>';
+                            }
                             $result .= '</select>';
                             $result .= '</div>';
                         } else {
@@ -257,7 +288,6 @@ class My_model extends CI_Model
                         $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
                     } else {
                         if ($this->db->table_exists($key)) {
-                            $name_role = $key;
                             $result .= '<div class="col">';
                             $result .= '<label>' . ucwords(implode(" ", explode('_', $key))) . '</label>';
                             $result .= '<select class="form-select" id="' . $key . '" name="' . $key . '">';

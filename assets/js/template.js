@@ -35,41 +35,9 @@ function showDataTables() {
 	});
 }
 
-function call_option(name) {
-	console.log(name);
+
+function call_option(i) {
+	i.forEach(myFunction);
 }
 
-var studentSelect = $('.form-select');
-$(".form-select").select2({
-	ajax: {
-		url: "http://localhost:8080/template/user/optionData",
-		dataType: 'json',
-		data: function (term) {
-			return {
-				term: term,
-				id: $("#id").val()
-			};
-		},
-		processResults: function (data) {
-			return {
-				results: data.result
-			};
-		},
-	}
-});
-
-var studentSelect = $('.form-select');
-$.ajax({
-	url: "http://localhost:8080/template/user/get_data",
-	type: "POST",
-	dataType: "json",
-	data: {
-		id: $("#id").val()
-	},
-	success: function (response) {
-		if (response.response == true) {
-			var option = new Option(response.data.name, response.data.id, true, true);
-			studentSelect.append(option).trigger('change');
-		}
-	},
-});
+$(".form-select").select2();
