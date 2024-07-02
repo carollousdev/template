@@ -108,24 +108,37 @@ class My_model extends CI_Model
         return $randomString;
     }
 
-    public function change_option($data = array(), $type = null)
+    public function getOption($id, $name, $data = array(), $type = null, $value = "")
     {
-        $array = array();
-        $result = array();
-        if ($type == 0) {
+        $result = "";
+        $result .= '<select class="form-select" id="' . $id . '" name="' . $name . '">';
+
+        if ($type == 1) {
             foreach ($data as $key => $value) {
-                $array['id'] = $key;
-                $array['text'] = $value;
-                array_push($result, $array);
+                $result .= '<option value="' . $key . '">' . $value . '</option>';
             }
         } else {
             foreach ($data as $key => $value) {
-                $array['id'] = $value->id;
-                $array['text'] = $value->name;
+                $result .= '<option value="' . $value['id'] . '">' . $value['text'] . '</option>';
             }
-            array_push($result, $array);
         }
 
+        $result .= '</select>';
+        return $result;
+    }
+
+    public function change_option($data = array(), $setNull = null)
+    {
+        $array = array();
+        $result = array();
+
+        if (empty($setNull)) {
+            foreach ($data as $key => $value) {
+                $array['id'] = $value->id;
+                $array['text'] = $value->name;
+                array_push($result, $array);
+            }
+        }
         return $result;
     }
 
@@ -156,10 +169,6 @@ class My_model extends CI_Model
         $result = $this->errorMessage[$key];
 
         return $result;
-    }
-
-    public function optionData()
-    {
     }
 
     private function _get_data_query()
@@ -227,42 +236,25 @@ class My_model extends CI_Model
             if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
                 in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
                 if ($check_character = explode('_', $value->name)) {
+                    $result .= '<div class="col">';
+                    $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
                     if ($value->name == 'password') {
-                        $result .= '<div class="col">';
-                        $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
                         $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="password" value="' . set_value($value->name) . '" required>';
                         $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
-                        $result .= '</div>';
+                    } else if ($this->db->table_exists($value->name)) {
+                        $field = $value->name;
+                        $array = $this->$field->gets();
+                        $result .= $this->master->getOption($value->name, $value->name, $array);
+                    } else if (!empty($option['set_data'][$value->name])) {
+                        $result .= $this->master->getOption($value->name, $value->name, $option['set_data'][$value->name], 1);
+                    } else if (!empty($option[$value->name])) {
+                        $result .= $this->master->getOption($value->name, $value->name, $option[$value->name]);
                     } else {
-                        if ($this->db->table_exists($value->name)) {
-                            $field = $value->name;
-                            $array = $this->$field->gets();
-                            $result .= '<div class="col">';
-                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
-                            foreach ($array as $k => $val) {
-                                $result .= '<option value="' . $val->id . '">' . $val->name . '</option>';
-                            }
-                            $result .= '</select>';
-                            $result .= '</div>';
-                        } else if (!empty($option[$value->name])) {
-                            $result .= '<div class="col">';
-                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                            $result .= '<select class="form-select" id="' . $value->name . '" name="' . $value->name . '">';
-                            foreach ($option[$value->name] as $q => $qval) {
-                                $result .= '<option value="' . $qval['id'] . '">' . $qval['text'] . '</option>';
-                            }
-                            $result .= '</select>';
-                            $result .= '</div>';
-                        } else {
-                            $result .= '<div class="col">';
-                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '" required>';
-                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
-                            $result .= '</div>';
-                        }
+                        $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '" required>';
+                        $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                     }
-                };
+                    $result .= '</div>';
+                }
             }
         }
 

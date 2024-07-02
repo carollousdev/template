@@ -7,6 +7,7 @@ var columnDefsVal = [
 		width: '100px'
 	}
 ];
+var onChangeOption = [];
 
 showDataTables();
 function showDataTables() {
@@ -35,9 +36,46 @@ function showDataTables() {
 	});
 }
 
-
 function call_option(i) {
 	i.forEach(myFunction);
+}
+
+function myFunction(item, index) {
+	$("#" + item).select2({
+		ajax: {
+			url: 'http://localhost:8080/template/navigation/optionData',
+			dataType: 'json',
+			type: "GET",
+			quietMillis: 100,
+			data: function (term) {
+				return {
+					term: term,
+					id: $("#id").val(),
+					tipe: item,
+					onChange: onChangeOption,
+				};
+			},
+			processResults: function (data) {
+				return { results: data };
+			},
+		},
+	});
+}
+
+function callback_option(name) {
+	$.ajax({
+		type: "POST",
+		url: 'http://localhost:8080/template/navigation/get_data',
+		dataType: 'json',
+		data: {
+			type: $("#type").val()
+		},
+		success: function (result) {
+			if (result.length == 0) {
+				$('#' + name).val("").trigger("change");
+			} else $('#' + name).val('NANt9eH41719583069').trigger("change");
+		}
+	});
 }
 
 $(".form-select").select2();

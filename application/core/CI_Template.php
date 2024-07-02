@@ -9,6 +9,7 @@ class CI_Template extends CI_Controller
     public $page_info;
     public $disable;
     public $option;
+    public $get;
 
     public function __construct($path = "", $page_info = null, $join_database = array())
     {
@@ -16,10 +17,21 @@ class CI_Template extends CI_Controller
         $this->load->library(['encrypt', 'encryption', 'form_validation', 'user_agent', 'session']);
 
         $this->data = $_POST;
+        $this->get = $_GET;
         $this->data['option'] = array();
         $this->data['path'] = $path;
         $this->data['js'] = '';
         $this->page_info = $page_info;
+
+        $this->get['term'] = "";
+        if (!empty($_GET['term'])) {
+            foreach ($_GET['term'] as $key => $value) {
+                if ($key == 'term') {
+                    $this->get['term'] = $value;
+                }
+            }
+        }
+
 
         if (!empty($page_info)) {
             $this->load->model($this->data['path'] . "_model", "master");
@@ -154,45 +166,28 @@ class CI_Template extends CI_Controller
         }
     }
 
-    // public function get_data()
-    // {
-    //     $data = array();
-    //     $response = false;
-
-    //     if (!empty($_POST['id'])) {
-    //         $data['name'] = $this->role->get(['id' => $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role])->name;
-    //         $data['id'] = $this->master->get(['id' => $this->encrypt->decode($_POST['id'])])->role;
-    //         $response = true;
-    //     }
-
-    //     $output = array(
-    //         'data' => $data,
-    //         'response' => $response
-    //     );
-
-    //     echo json_encode($output);
-    // }
-
     public function optionData()
     {
-        $search_term = "";
         $data = array();
-        foreach ($_GET['term'] as $key => $value) {
-            if ($key == 'term') {
-                $search_term = $value;
+        $option = array();
+
+        if (!empty($this->option[$_GET['tipe']])) {
+            foreach ($this->option[$_GET['tipe']] as $key => $value) {
+                $data['id'] = $value['id'];
+                $data['text'] = $value['text'];
+                array_push($option, $data);
             }
         }
+        echo json_encode($option);
+    }
 
-        $usersData['result'] = array();
-
-        // $data['id'] = $key;
-        // $data['text'] = $value;
-        // array_push($usersData['result'], $data);
-
-        // !empty($_GET['id']) ? $selected = $this->master->get(['id' => $this->encrypt->decode($_GET['id'])])->role : $selected = "";
-
-        // var_dump($usersData);
-
-        echo json_encode($usersData);
+    public function get_data()
+    {
+        $data = array();
+        if ($_POST['type'] == 0) {
+            $data['text'] = "Data Master";
+            $data['id'] = 'NANt9eH41719583069';
+        }
+        echo json_encode($data);
     }
 }
