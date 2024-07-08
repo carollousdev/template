@@ -1,6 +1,10 @@
 call_option(['root']);
-
 $('#type').on('change', function () {
-    onChangeOption = { name: $(this).attr('id'), value: $(this).val() };
-    callback_option('root');
+    if ($(this).val() == 0) {
+        call_option(['root']);
+        $("#root").val("").trigger('change');
+    } else {
+        call_option(['root']);
+        $("#root").val("").trigger('change');
+    }
 });

@@ -9,7 +9,7 @@ class Role_model extends My_model
         $CI = &get_instance();
         $this->table = "role";
         $this->rules = [
-            'short_name' => 'required|max_length[10]|is_unique[role.short_name]|alpha',
+            'short_name' => 'required|max_length[10]|alpha',
         ];
         $this->method = ['permission'];
     }

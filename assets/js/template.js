@@ -7,7 +7,6 @@ var columnDefsVal = [
 		width: '100px'
 	}
 ];
-var onChangeOption = [];
 
 showDataTables();
 function showDataTables() {
@@ -43,39 +42,24 @@ function call_option(i) {
 function myFunction(item, index) {
 	$("#" + item).select2({
 		ajax: {
-			url: 'http://localhost:8080/template/navigation/optionData',
+			url: 'http://localhost:8080/template/navigation/getOption',
 			dataType: 'json',
 			type: "GET",
 			quietMillis: 100,
 			data: function (term) {
 				return {
 					term: term,
-					id: $("#id").val(),
 					tipe: item,
-					onChange: onChangeOption,
+					FormData: $('form').serializeArray(),
 				};
 			},
 			processResults: function (data) {
 				return { results: data };
 			},
+			cache: false,
 		},
+		theme: "bootstrap4",
 	});
 }
 
-function callback_option(name) {
-	$.ajax({
-		type: "POST",
-		url: 'http://localhost:8080/template/navigation/get_data',
-		dataType: 'json',
-		data: {
-			type: $("#type").val()
-		},
-		success: function (result) {
-			if (result.length == 0) {
-				$('#' + name).val("").trigger("change");
-			} else $('#' + name).val('NANt9eH41719583069').trigger("change");
-		}
-	});
-}
-
-$(".form-select").select2();
+$('.form-select').select2();

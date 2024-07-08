@@ -9,7 +9,6 @@ class Navigation extends CI_Template
         parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME), 1);
         $this->data['js'] = '<script src="http://localhost:8080/template/assets/js/navigation.js"></script>';
         $this->option['set_data']['type'] = ['Root', 'Master', 'Single'];
-        !empty($_GET['onChange']) && $_GET['onChange']['value'] != 0 ? $setNull = 1 : $setNull = 0;
-        $this->option['root'] = $this->master->change_option($this->master->gets(['type' => 1], ['name' => $this->get['term']]), $setNull);
+        $this->option['root'] = $this->master->change_option($this->master->gets(['type' => 1], ['name' => $this->get['term']]));
     }
 }

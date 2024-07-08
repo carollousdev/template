@@ -11,9 +11,11 @@ class Navigation_model extends My_model
         $this->rules = [
             'icon' => 'trim|required',
             'link' => 'trim|required',
-            'type' => 'trim|required'
+            'type' => 'trim|required',
+            'root' => 'trim|required'
         ];
         $this->change_value = ['type' => ['Root', 'Master', 'Singe']];
+        $this->option_where = ['root' => ['type' => 0]];
     }
 
     public function sidebar()

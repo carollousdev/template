@@ -10,6 +10,7 @@ class CI_Template extends CI_Controller
     public $disable;
     public $option;
     public $get;
+    public $where;
 
     public function __construct($path = "", $page_info = null, $join_database = array())
     {
@@ -97,8 +98,16 @@ class CI_Template extends CI_Controller
         $data = [];
         $error = [];
 
-        foreach ($_POST as $key => $value) {
-            $this->form_validation->set_rules($key, strtoupper($key), $this->master->validate_config($key));
+        if (count($_POST) > 1) {
+            foreach ($this->master->get_field_original() as $key => $value) {
+                if (!in_array($value, ['id', 'username', 'action'])) {
+                    $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                } else {
+                    if ($value == 'username') {
+                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                    }
+                }
+            }
         }
 
         if ($this->form_validation->run() == FALSE) {
@@ -127,15 +136,16 @@ class CI_Template extends CI_Controller
         $data = [];
         $error = [];
 
-        $_POST['id'] = $this->encrypt->decode($_POST['id']);
-        $query = $this->master->get(['id' => $_POST['id']]);
+        $query = $this->master->get(['id' => $this->encrypt->decode($this->data['id'])]);
 
-        foreach ($_POST as $key => $value) {
-            if (!in_array($key, ['id', 'username'])) {
-                $this->form_validation->set_rules($key, strtoupper($key), $this->master->validate_config($key));
-            } else {
-                if ($key == 'username' && $query->username != $value) {
-                    $this->form_validation->set_rules($key, strtoupper($key), 'rule1', ['rule1' => 'username value cannot change.']);
+        if (count($_POST) > 1) {
+            foreach ($this->master->get_field_original() as $key => $value) {
+                if (!in_array($value, ['id', 'username', 'action'])) {
+                    $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                } else {
+                    if ($value == 'username' && $query->username != $_POST['username']) {
+                        $this->form_validation->set_rules($value, strtoupper($value), 'rule1', ['rule1' => 'Username value cannot change.']);
+                    }
                 }
             }
         }
@@ -150,12 +160,13 @@ class CI_Template extends CI_Controller
                 $_POST['password'] = $this->encrypt->encode($_POST['password'], $data['create_key']);
             }
             $data = array_merge($data, $_POST);
-            if ($this->master->edit($data, ['id' => $query->id])) {
+            unset($data['id']);
+            if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
                 redirect($this->data['path']);
             }
         }
 
-        $this->data['form'] = $this->master->edit_form($this->data['id'], $error);
+        $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->option);
         $this->load->view('element/form', $this->data);
     }
 
@@ -166,28 +177,37 @@ class CI_Template extends CI_Controller
         }
     }
 
-    public function optionData()
+    public function getOption()
     {
-        $data = array();
         $option = array();
+        $data = array();
+        $form_serialize = array();
+        $call_option = true;
 
-        if (!empty($this->option[$_GET['tipe']])) {
+        foreach ($_GET['FormData'] as $key => $value) {
+            $form_serialize[$value['name']] = $value['value'];
+        }
+
+        if (!empty($this->master->option_where[$_GET['tipe']])) {
+            foreach ($this->master->option_where[$_GET['tipe']] as $key => $value) {
+                if ($form_serialize[$key] == $value) {
+                    $call_option = true;
+                } else $call_option = false;
+            }
+        }
+
+        if ($call_option == true) {
             foreach ($this->option[$_GET['tipe']] as $key => $value) {
                 $data['id'] = $value['id'];
                 $data['text'] = $value['text'];
                 array_push($option, $data);
             }
+        } else {
+            $data['id'] = 'no' . $_GET['tipe'];
+            $data['text'] = 'NO ' . strtoupper($_GET['tipe']);
+            array_push($option, $data);
         }
-        echo json_encode($option);
-    }
 
-    public function get_data()
-    {
-        $data = array();
-        if ($_POST['type'] == 0) {
-            $data['text'] = "Data Master";
-            $data['id'] = 'NANt9eH41719583069';
-        }
-        echo json_encode($data);
+        echo json_encode($option);
     }
 }
