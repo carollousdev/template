@@ -196,15 +196,18 @@ class CI_Template extends CI_Controller
             }
         }
 
+        !empty($form_serialize['id']) ? $id = $this->encrypt->decode($form_serialize['id']) : $id = "";
         if ($call_option == true) {
             foreach ($this->option[$_GET['tipe']] as $key => $value) {
-                $data['id'] = $value['id'];
-                $data['text'] = $value['text'];
-                array_push($option, $data);
+                if ($value['id'] != $id) {
+                    $data['id'] = $value['id'];
+                    $data['text'] = $value['text'];
+                    array_push($option, $data);
+                }
             }
         } else {
             $data['id'] = 'no' . $_GET['tipe'];
-            $data['text'] = 'NO ' . strtoupper($_GET['tipe']);
+            $data['text'] = 'No ' . $_GET['tipe'];
             array_push($option, $data);
         }
 

@@ -85,6 +85,14 @@
             return $res;
         }
 
+        public function get_field_form()
+        {
+            $allfield = $this->db->list_fields($this->table);
+            $disable = array_merge($this->disable, ["id", "create_key", "create_date", "status"]);
+            $res = array_reverse(array_reverse(array_diff($allfield, $disable)));
+            return $res;
+        }
+
         public function getHeaderName()
         {
             $TableHeader = "<thead><tr>";
@@ -139,8 +147,8 @@
                 }
                 if ($type == 2) {
                     foreach ($data as $key => $value) {
-                        $key == $selected ? $select = "selected" : $select = "";
-                        $result .= '<option value="' . $value['id'] . '">' . $value['text'] . '</option>';
+                        $value['id'] == $selected ? $select = "selected" : $select = "";
+                        $result .= '<option value="' . $value['id'] . '" ' . $select . '>' . $value['text'] . '</option>';
                     }
                 }
             }
@@ -252,13 +260,21 @@
         public function create_form($error = array(), $option = array())
         {
             $result = "";
-            $get_field_form = $this->master->get_field_original();
+            $get_field_form = $this->master->get_field_form();
             $fields = $this->db->field_data($this->table);
+            if (count($get_field_form) == 5) {
+                $col = 'col-2';
+            } else if (count($fields) % 4 == 0) {
+                $col = 'col-3';
+            } else if (count($fields) % 3  == 0) {
+                $col = 'col-4';
+            } else $col = 'col-6';
+            $x = 0;
             foreach ($fields as $key => $value) {
                 if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
                     in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
                     if ($check_character = explode('_', $value->name)) {
-                        $result .= '<div class="col form-group">';
+                        $result .= '<div class="' . $col . ' form-group">';
                         $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
                         if ($value->name == 'password') {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="password" value="' . set_value($value->name) . '" required>';
@@ -267,18 +283,19 @@
                             $field = $value->name;
                             $array = $this->$field->gets();
                             $result .= $this->master->getOption($value->name, $value->name, $isError, "", $array);
-                            $result .=  form_error($key, '<div class="error">', '</div>');
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
                         } else if (!empty($option['set_data'][$value->name])) {
                             $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option['set_data'][$value->name], 1);
-                            $result .=  form_error($key, '<div class="error">', '</div>');
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
                         } else if (!empty($option[$value->name])) {
                             $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option[$value->name], 2);
-                            $result .=  form_error($key, '<div class="error">', '</div>');
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
                         } else {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '" required>';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         }
                         $result .= '</div>';
+                        $x++;
                     }
                 }
             }
