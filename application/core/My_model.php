@@ -190,7 +190,7 @@
 
         public function validate_config($key)
         {
-            !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'trim|required|min_length[4]|max_length[25]|alpha_numeric_spaces';
+            !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'required';
             return $result;
         }
 
@@ -269,14 +269,17 @@
             } else if (count($fields) % 3  == 0) {
                 $col = 'col-4';
             } else $col = 'col-6';
-            $x = 0;
             foreach ($fields as $key => $value) {
                 if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
                     in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
                     if ($check_character = explode('_', $value->name)) {
                         $result .= '<div class="' . $col . ' form-group">';
                         $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                        if ($value->name == 'password') {
+                        if ($value->type == 'text') {
+                            $result .= '<textarea class="form-control" id="' . $value->name . '" name="' . $value->name . '" rows="2" cols="50"></textarea>';
+                        } else if ($value->type == 'date') {
+                            $result .= '<input type="date" class="form-control" id="' . $value->name . '" name="' . $value->name . '">';
+                        } else if ($value->name == 'password') {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="password" value="' . set_value($value->name) . '" required>';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         } else if ($this->db->table_exists($value->name)) {
@@ -295,7 +298,6 @@
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         }
                         $result .= '</div>';
-                        $x++;
                     }
                 }
             }

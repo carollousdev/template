@@ -63,3 +63,8 @@ function myFunction(item, index) {
 }
 
 $('.form-select').select2();
+
+//Date picker
+$('#reservationdate').datetimepicker({
+	format: 'L'
+});
