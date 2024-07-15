@@ -8,7 +8,7 @@ class CI_Template extends CI_Controller
     public $master;
     public $page_info;
     public $disable;
-    public $option;
+    public $options;
     public $get;
     public $where;
 
@@ -68,9 +68,13 @@ class CI_Template extends CI_Controller
                             if ($val == 'action') {
                                 $row[] = $this->master->actionButton($this->encrypt->encode($value->id));
                             } else {
-                                if (!empty($this->master->change_value[$val])) {
-                                    $row[] = $this->master->change_value[$val][$value->$val];
-                                } else $row[] = $value->$val;
+                                if (!empty($this->options[$val])) {
+                                    $row[] = $this->master->change_options($this->options[$val][0], $value->$val);
+                                } else {
+                                    if (!empty($this->master->change_value[$val])) {
+                                        $row[] = $this->master->change_value[$val][$value->$val];
+                                    } else $row[] = $value->$val;
+                                }
                             }
                         }
                     }
@@ -126,7 +130,7 @@ class CI_Template extends CI_Controller
             }
         }
 
-        $this->data['form'] = $this->master->create_form($error, $this->option);
+        $this->data['form'] = $this->master->create_form($error, $this->options);
         $this->load->view('element/form', $this->data);
     }
 
@@ -166,7 +170,7 @@ class CI_Template extends CI_Controller
             }
         }
 
-        $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->option);
+        $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->options);
         $this->load->view('element/form', $this->data);
     }
 
@@ -197,8 +201,8 @@ class CI_Template extends CI_Controller
         }
 
         !empty($form_serialize['id']) ? $id = $this->encrypt->decode($form_serialize['id']) : $id = "";
-        if ($call_option == true) {
-            foreach ($this->option[$_GET['tipe']] as $key => $value) {
+        if ($call_option == true && !empty($this->options[$_GET['tipe']])) {
+            foreach ($this->master->change_option($this->master->gets($this->options[$_GET['tipe']][1], $this->options[$_GET['tipe']][2])) as $key => $value) {
                 if ($value['id'] != $id) {
                     $data['id'] = $value['id'];
                     $data['text'] = $value['text'];

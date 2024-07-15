@@ -12,7 +12,6 @@
         public $method = [];
         public $rules = [];
         public $errorMessage = [];
-        public $option = [];
         public $change_value = [];
         public $option_where = [];
 
@@ -172,6 +171,13 @@
             return $result;
         }
 
+        public function change_options($table, $value = "")
+        {
+            if (!empty($this->$table->get(['id' => $value]))) {
+                return $this->$table->get(['id' => $value])->name;
+            } else return "-";
+        }
+
         public function actionButton($id)
         {
             $result = "";
@@ -291,8 +297,12 @@
                             $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option['set_data'][$value->name], 1);
                             $result .=  form_error($value->name, '<div class="error">', '</div>');
                         } else if (!empty($option[$value->name])) {
-                            $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option[$value->name], 2);
+                            $option_array =  $this->master->change_option($this->master->gets($option[$value->name][1], $option[$value->name][2]));
+                            $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option_array, 2);
                             $result .=  form_error($value->name, '<div class="error">', '</div>');
+                        } else if ($value->name == 'email') {
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="email" value="' . set_value($value->name) . '" required>';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         } else {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '" required>';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
@@ -332,8 +342,12 @@
                                 $result .= $this->master->getOption($key, $key, $isError, $id, $option['set_data'][$key], 1, $value);
                                 $result .=  form_error($key, '<div class="error">', '</div>');
                             } else if (!empty($option[$key])) {
-                                $result .= $this->master->getOption($key, $key, $isError, $id, $option[$key], 2, $value);
+                                $option_array =  $this->master->change_option($this->master->gets($option[$key][1], $option[$key][2]));
+                                $result .= $this->master->getOption($key, $key, $isError, $id, $option_array, 2, $value);
                                 $result .=  form_error($key, '<div class="error">', '</div>');
+                            } else if ($key == 'email') {
+                                $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="email" value="' . $value . '" required>';
+                                $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
                             } else {
                                 !empty(set_value($key)) ? $value = set_value($key) : $value;
                                 $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="text" value="' . $value . '" required>';
