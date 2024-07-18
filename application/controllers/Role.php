@@ -54,12 +54,12 @@ class Role extends CI_Template
                 foreach ($this->permissions->get(['role' => $this->encrypt->decode($this->data['id']), 'navigation' => $value->id]) as $k => $val) {
                     if (in_array($k, $method)) {
                         $val == 1 ? $checked = 'checked' : $checked = "";
-                        $this->data['result'] .= '<td><input class="custom-control-input" type="checkbox" id="' . $value->id . '_' . $k . '" name="' . $value->id . '_' . $k . '" value=1 ' . $checked . '></td>';
+                        $this->data['result'] .= '<td><input type="checkbox" id="' . $value->id . '_' . $k . '" name="' . $value->id . '_' . $k . '" value=1 ' . $checked . '></td>';
                     }
                 }
             } else {
                 foreach ($method as $k => $val) {
-                    $this->data['result'] .= '<td><input class="custom-control-input" type="checkbox" id="' . $value->id . '_' . $val . '" name="' . $value->id . '_' . $val . '" value=1></td>';
+                    $this->data['result'] .= '<td><input type="checkbox" id="' . $value->id . '_' . $val . '" name="' . $value->id . '_' . $val . '" value=1></td>';
                 }
             }
             $this->data['result'] .= "</tr>";
