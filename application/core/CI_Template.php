@@ -68,7 +68,7 @@ class CI_Template extends CI_Controller
         if (!empty($this->data['read_permission'])) {
             $this->data['hTable'] = $this->master->getHeaderName();
             $this->load->view($this->data['path'], $this->data);
-        } else redirect('dashboard');
+        } else redirect('dashboard', 'refresh');
     }
 
     public function server_side()
@@ -154,13 +154,13 @@ class CI_Template extends CI_Controller
                 $data['id'] = $this->master->getLastId();
                 $data = array_merge($data, $_POST);
                 if ($this->master->create($data)) {
-                    redirect($this->data['path']);
+                    redirect($this->data['path'], 'refresh');
                 }
             }
 
             $this->data['form'] = $this->master->create_form($error, $this->options);
             $this->load->view('element/form', $this->data);
-        } else redirect($this->data['path']);
+        } else redirect($this->data['path'], 'refresh');
     }
 
     public function edit()
@@ -195,22 +195,22 @@ class CI_Template extends CI_Controller
                 $data = array_merge($data, $_POST);
                 unset($data['id']);
                 if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
-                    redirect($this->data['path']);
+                    redirect($this->data['path'], 'refresh');
                 }
             }
 
             $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->options);
             $this->load->view('element/form', $this->data);
-        } else redirect($this->data['path']);
+        } else redirect($this->data['path'], 'refresh');
     }
 
     public function delete()
     {
         if (!empty($this->data['delete_permission']) && !empty($this->data['id'])) {
             if ($this->master->delete(['id' => $this->encrypt->decode($this->data['id'])])) {
-                redirect($this->data['path']);
+                redirect($this->data['path'], 'refresh');
             }
-        } else redirect($this->data['path']);
+        } else redirect($this->data['path'], 'refresh');
     }
 
     public function getOption()

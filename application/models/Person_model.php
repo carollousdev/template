@@ -9,5 +9,6 @@ class Person_model extends My_model
         $CI = &get_instance();
         $this->table = "person";
         $this->change_value = ['gender' => ['Male', 'Female']];
+        $this->column_order = ['pob', 'name'];
     }
 }

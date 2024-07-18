@@ -5,7 +5,7 @@
     {
         protected $table;
         public $column_search = ["name"];
-        public $column_order = [];
+        public $column_order = ['name'];
         public $disable = [];
         public $add_field = [];
         public $button = ['edit' => 'primary', 'delete' => 'danger', 'create' => 'primary', 'permission' => 'warning'];
@@ -229,16 +229,12 @@
 
             if (isset($_POST['order']) && !empty($order[$_POST['order']['0']['column']])) {
                 if (!empty($this->column_order)) {
-                    foreach ($this->column_order as $value) {
-                        if ($order[$_POST['order']['0']['column']] == $value) {
-                            $this->db->order_by($value, $_POST['order']['0']['dir']);
-                        }
+                    foreach ($this->column_order as $key => $value) {
+                        $this->db->order_by($value, $_POST['order']['0']['dir']);
                     }
                 } else {
                     $this->db->order_by($order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
                 }
-            } else {
-                $this->db->order_by('name', 'ASC');
             }
         }
 
