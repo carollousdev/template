@@ -6,6 +6,6 @@ class Person extends CI_Template
     public function __construct()
     {
         parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME), 1);
-        $this->option['set_data']['gender'] = ['Male', 'Female'];
+        $this->options['set_data']['gender'] = ['Male', 'Female'];
     }
 }

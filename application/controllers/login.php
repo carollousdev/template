@@ -24,11 +24,12 @@ class login extends CI_Template
             $newdata = array(
                 'username' => $_POST['username'],
                 'name' => $query->name,
+                'role' => $query->role,
                 'logged_in' => TRUE
             );
             $this->session->set_userdata($newdata);
             redirect('dashboard');
         }
-        parent::index();
+        $this->load->view('login', $this->data);
     }
 }

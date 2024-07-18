@@ -11,6 +11,6 @@ class Dashboard extends CI_Template
 
     public function index()
     {
-        parent::index();
+        $this->load->view('dashboard', $this->data);
     }
 }

@@ -33,19 +33,42 @@ class CI_Template extends CI_Controller
             }
         }
 
-
         if (!empty($page_info)) {
             $this->load->model($this->data['path'] . "_model", "master");
         } else $this->load->model("dashboard_model", "master");
 
+        !empty($_SESSION['role']) ? $role = $_SESSION['role'] : $role = "";
+
         $this->data['dashboard'] = $this->dashboard->get(['id' => 1]);
         $this->data['sidebar'] = $this->navigation->sidebar();
+        !empty($this->navigation->get(['link' => $path, 'status' => 0])) ? $navigation = $this->navigation->get(['link' => $path, 'status' => 0])->id : $navigation = "";
+        if (!empty($this->permissions->get(['role' => $role, 'navigation' => $navigation, 'c' => 1, 'status' => 0]))) {
+            $this->data['create_permission'] = '<a href="' . $path . '/create" class="mt-1 btn btn-outline-primary btn-sm">Create ' . ucfirst($path) . '</a>';
+        } else $this->data['create_permission'] = '';
+
+        if (!empty($this->permissions->get(['role' => $role, 'navigation' => $navigation, 'r' => 1, 'status' => 0]))) {
+            $this->data['read_permission'] = 'true';
+        } else $this->data['read_permission'] = '';
+
+        if (!empty($this->permissions->get(['role' => $role, 'navigation' => $navigation, 'u' => 1, 'status' => 0]))) {
+            $this->data['edit_permission'] = 'true';
+        } else $this->data['edit_permission'] = '';
+
+        if (!empty($this->permissions->get(['role' => $role, 'navigation' => $navigation, 'd' => 1, 'status' => 0]))) {
+            $this->data['delete_permission'] = 'true';
+        } else $this->data['delete_permission'] = '';
+
+        if ($role == 'ROEv7T351718415158') {
+            $this->data['permission_permission'] = 'true';
+        } else $this->data['permission_permission'] = '';
     }
 
     public function index()
     {
-        $this->data['hTable'] = $this->master->getHeaderName();
-        $this->load->view($this->data['path'], $this->data);
+        if (!empty($this->data['read_permission'])) {
+            $this->data['hTable'] = $this->master->getHeaderName();
+            $this->load->view($this->data['path'], $this->data);
+        } else redirect('dashboard');
     }
 
     public function server_side()
@@ -73,7 +96,11 @@ class CI_Template extends CI_Controller
                                 } else {
                                     if (!empty($this->master->change_value[$val])) {
                                         $row[] = $this->master->change_value[$val][$value->$val];
-                                    } else $row[] = $value->$val;
+                                    } else {
+                                        if ($value->$val == '0') {
+                                            $row[] = '-';
+                                        } else $row[] = $value->$val;
+                                    }
                                 }
                             }
                         }
@@ -102,36 +129,38 @@ class CI_Template extends CI_Controller
         $data = [];
         $error = [];
 
-        if (count($_POST) > 1) {
-            foreach ($this->master->get_field_original() as $key => $value) {
-                if (!in_array($value, ['id', 'username', 'action'])) {
-                    $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
-                } else {
-                    if ($value == 'username') {
+        if (!empty($this->data['create_permission'])) {
+            if (count($_POST) > 1) {
+                foreach ($this->master->get_field_original() as $key => $value) {
+                    if (!in_array($value, ['id', 'username', 'action'])) {
                         $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                    } else {
+                        if ($value == 'username') {
+                            $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                        }
                     }
                 }
             }
-        }
 
-        if ($this->form_validation->run() == FALSE) {
-            foreach ($this->form_validation->error_array() as $key => $value) {
-                $error[] = $key;
+            if ($this->form_validation->run() == FALSE) {
+                foreach ($this->form_validation->error_array() as $key => $value) {
+                    $error[] = $key;
+                }
+            } else {
+                if (isset($_POST['password'])) {
+                    $data['create_key'] = crypt($_POST['password'], 16);
+                    $_POST['password'] = $this->encrypt->encode($_POST['password'], $data['create_key']);
+                }
+                $data['id'] = $this->master->getLastId();
+                $data = array_merge($data, $_POST);
+                if ($this->master->create($data)) {
+                    redirect($this->data['path']);
+                }
             }
-        } else {
-            if (isset($_POST['password'])) {
-                $data['create_key'] = crypt($_POST['password'], 16);
-                $_POST['password'] = $this->encrypt->encode($_POST['password'], $data['create_key']);
-            }
-            $data['id'] = $this->master->getLastId();
-            $data = array_merge($data, $_POST);
-            if ($this->master->create($data)) {
-                redirect($this->data['path']);
-            }
-        }
 
-        $this->data['form'] = $this->master->create_form($error, $this->options);
-        $this->load->view('element/form', $this->data);
+            $this->data['form'] = $this->master->create_form($error, $this->options);
+            $this->load->view('element/form', $this->data);
+        } else redirect($this->data['path']);
     }
 
     public function edit()
@@ -140,45 +169,48 @@ class CI_Template extends CI_Controller
         $data = [];
         $error = [];
 
-        $query = $this->master->get(['id' => $this->encrypt->decode($this->data['id'])]);
-
-        if (count($_POST) > 1) {
-            foreach ($this->master->get_field_original() as $key => $value) {
-                if (!in_array($value, ['id', 'username', 'action'])) {
-                    $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
-                } else {
-                    if ($value == 'username' && $query->username != $_POST['username']) {
-                        $this->form_validation->set_rules($value, strtoupper($value), 'rule1', ['rule1' => 'Username value cannot change.']);
+        if (!empty($this->data['edit_permission']) && !empty($this->data['id'])) {
+            $query = $this->master->get(['id' => $this->encrypt->decode($this->data['id'])]);
+            if (count($_POST) > 1) {
+                foreach ($this->master->get_field_original() as $key => $value) {
+                    if (!in_array($value, ['id', 'username', 'action'])) {
+                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                    } else {
+                        if ($value == 'username' && $query->username != $_POST['username']) {
+                            $this->form_validation->set_rules($value, strtoupper($value), 'rule1', ['rule1' => 'Username value cannot change.']);
+                        }
                     }
                 }
             }
-        }
 
-        if ($this->form_validation->run() == FALSE) {
-            foreach ($this->form_validation->error_array() as $key => $value) {
-                $error[] = $key;
+            if ($this->form_validation->run() == FALSE) {
+                foreach ($this->form_validation->error_array() as $key => $value) {
+                    $error[] = $key;
+                }
+            } else {
+                if (isset($_POST['password'])) {
+                    $data['create_key'] = crypt($_POST['password'], 16);
+                    $_POST['password'] = $this->encrypt->encode($_POST['password'], $data['create_key']);
+                }
+                $data = array_merge($data, $_POST);
+                unset($data['id']);
+                if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
+                    redirect($this->data['path']);
+                }
             }
-        } else {
-            if (isset($_POST['password'])) {
-                $data['create_key'] = crypt($_POST['password'], 16);
-                $_POST['password'] = $this->encrypt->encode($_POST['password'], $data['create_key']);
-            }
-            $data = array_merge($data, $_POST);
-            unset($data['id']);
-            if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
-                redirect($this->data['path']);
-            }
-        }
 
-        $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->options);
-        $this->load->view('element/form', $this->data);
+            $this->data['form'] = $this->master->edit_form($this->data['id'], $error, $this->options);
+            $this->load->view('element/form', $this->data);
+        } else redirect($this->data['path']);
     }
 
     public function delete()
     {
-        if ($this->master->delete(['id' => $this->encrypt->decode($_POST['id'])])) {
-            redirect($this->data['path']);
-        }
+        if (!empty($this->data['delete_permission']) && !empty($this->data['id'])) {
+            if ($this->master->delete(['id' => $this->encrypt->decode($this->data['id'])])) {
+                redirect($this->data['path']);
+            }
+        } else redirect($this->data['path']);
     }
 
     public function getOption()

@@ -7,6 +7,6 @@ class Vessel extends CI_Template
     public function __construct()
     {
         parent::__construct(pathinfo(__FILE__, PATHINFO_FILENAME), 1);
-        $this->option['set_data']['type'] = ['Chemical Tanker', 'Container Tanker', 'Tugboat', 'SPOB'];
+        $this->options['set_data']['type'] = ['Oil & Chemical Tanker', 'Container Tanker', 'Tugboat', 'SPOB'];
     }
 }

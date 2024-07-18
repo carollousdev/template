@@ -41,7 +41,7 @@
             }
 
             if (!empty($order)) {
-                $this->db->order_by($order, 'DESC');
+                $this->db->order_by($order, 'ASC');
             }
 
             return $this->db->get_where($this->table . " m", $where)->row();
@@ -184,10 +184,12 @@
             $method = array_merge(['edit', 'delete'], $this->method);
             $result .= '<div class="btn-group">';
             foreach ($method as $key => $value) {
-                $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
-                $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
-                $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
-                $result .= '</form>';
+                if (!empty($this->data[$value . '_permission'])) {
+                    $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
+                    $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+                    $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
+                    $result .= '</form>';
+                }
             }
             $result .= '</div>';
 
@@ -281,7 +283,7 @@
                     if ($check_character = explode('_', $value->name)) {
                         $result .= '<div class="' . $col . ' form-group">';
                         $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                        if ($value->type == 'text') {
+                        if ($value->type == 'text' && $value->name !== 'password') {
                             $result .= '<textarea class="form-control" id="' . $value->name . '" name="' . $value->name . '" rows="2" cols="50"></textarea>';
                         } else if ($value->type == 'date') {
                             $result .= '<input type="date" class="form-control" id="' . $value->name . '" name="' . $value->name . '">';
@@ -318,46 +320,63 @@
         public function edit_form($id, $error = array(), $option = array())
         {
             $result = "";
+            $get_field_form = $this->master->get_field_form();
+            $fields = $this->db->field_data($this->table);
+            if (count($get_field_form) == 5) {
+                $col = 'col-2';
+            } else if (count($fields) % 4 == 0) {
+                $col = 'col-3';
+            } else if (count($fields) % 3  == 0) {
+                $col = 'col-4';
+            } else $col = 'col-6';
+
             $sql = $this->master->get(['id' => $this->encrypt->decode($id)]);
-            $get_field_form = $this->master->get_field_original();
-            foreach ($sql as $key => $value) {
-                if (in_array($key, $get_field_form)) {
-                    in_array($key, $error) ? $isError = 'is-invalid' : $isError = '';
-                    if ($check_character = explode('_', $key)) {
-                        if ($key == "id") {
-                            $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+            foreach ($fields as $key => $value) {
+                $name = $value->name;
+                if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
+                    in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
+                    if ($check_character = explode('_', $value->name)) {
+                        $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+                        $result .= '<div class="' . $col . ' form-group">';
+                        $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
+                        if ($value->type == 'text' && $value->name !== 'password') {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $result .= '<textarea class="form-control" id="' . $value->name . '" name="' . $value->name . '" rows="2" cols="50">' . $valuekey . '</textarea>';
+                        } else if ($value->type == 'date') {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $result .= '<input type="date" class="form-control" id="' . $value->name . '" name="' . $value->name . '" value="' . $sql->$name . '">';
+                        } else if ($value->name == 'password') {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $this->encrypt->decode($sql->password, $sql->create_key);
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="password" value="' . $valuekey . '" required>';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
+                        } else if ($this->db->table_exists($value->name)) {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $array = $this->$name->gets();
+                            $result .= $this->master->getOption($value->name, $value->name, $isError, "", $array, 0, $valuekey);
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
+                        } else if (!empty($option['set_data'][$value->name])) {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option['set_data'][$value->name], 1, $valuekey);
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
+                        } else if (!empty($option[$value->name])) {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $option_array =  $this->master->change_option($this->master->gets($option[$value->name][1], $option[$value->name][2]));
+                            $result .= $this->master->getOption($value->name, $value->name, $isError, "", $option_array, 2, $valuekey);
+                            $result .=  form_error($value->name, '<div class="error">', '</div>');
+                        } else if ($value->name == 'email') {
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="email" value="' . $valuekey . '" required>';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         } else {
-                            $result .= '<div class="col form-group">';
-                            $result .= '<label>' . ucwords(implode(" ", $check_character)) . '</label>';
-                            if ($key == 'password') {
-                                !empty(set_value($key)) ? $value = set_value($key) : $value = $this->encrypt->decode($value, $sql->create_key);
-                                $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="password" value="' . $value . '" required>';
-                                $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
-                            } else if ($this->db->table_exists($key)) {
-                                $field = $key;
-                                $array = $this->$field->gets();
-                                $result .= $this->master->getOption($key, $key, $isError, $id, $array, 0, $value);
-                                $result .=  form_error($key, '<div class="error">', '</div>');
-                            } else if (!empty($option['set_data'][$key])) {
-                                $result .= $this->master->getOption($key, $key, $isError, $id, $option['set_data'][$key], 1, $value);
-                                $result .=  form_error($key, '<div class="error">', '</div>');
-                            } else if (!empty($option[$key])) {
-                                $option_array =  $this->master->change_option($this->master->gets($option[$key][1], $option[$key][2]));
-                                $result .= $this->master->getOption($key, $key, $isError, $id, $option_array, 2, $value);
-                                $result .=  form_error($key, '<div class="error">', '</div>');
-                            } else if ($key == 'email') {
-                                $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="email" value="' . $value . '" required>';
-                                $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
-                            } else {
-                                !empty(set_value($key)) ? $value = set_value($key) : $value;
-                                $result .= '<input id="' . $key . '" name="' . $key . '" class="form-control ' . $isError . '" type="text" value="' . $value . '" required>';
-                                $result .=  form_error($key, '<div class="error invalid-feedback">', '</div>');
-                            }
-                            $result .= '</div>';
+                            !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . $valuekey . '" required>';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         }
+                        $result .= '</div>';
                     }
                 }
             }
+
             return $result;
         }
     }

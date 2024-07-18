@@ -21,14 +21,20 @@ class Navigation_model extends My_model
     public function sidebar()
     {
         $html = "";
-        foreach ($this->navigation->gets(['type' => 1]) as $key => $value) {
-            $html .= '<li class="nav-header">' . strtoupper($value->name) . '</li>';
+        !empty($_SESSION['role']) ? $role = $_SESSION['role'] : $role = "";
+        foreach ($this->navigation->gets(['type' => 1], [], ['urutan', 'ASC']) as $key => $value) {
+            $header[$value->id] = '';
+            $body[$value->id] = '';
             foreach ($this->navigation->gets(['root' => $value->id], [], ['name', 'ASC']) as $k => $val) {
-                $val->link == $this->data['path'] ? $active = 'active' : $active = "";
-                $html .= '<li class="nav-item">';
-                $html .= '<a href="' . base_url() . $val->link . '" class="nav-link ' . $active . '"><i class="nav-icon ' . $val->icon . '"></i><p>' . $val->name . '</p></a>';
-                $html .= '</li>';
+                if (!empty($this->permissions->get(['role' => $role, 'navigation' => $val->id, 'r' => 1]))) {
+                    $header[$val->root] = '<li class="nav-header">' . strtoupper($value->name) . '</li>';
+                    $val->link == $this->data['path'] ? $active = 'active' : $active = "";
+                    $body[$val->root] .= '<li class="nav-item">';
+                    $body[$val->root] .= '<a href="' . base_url() . $val->link . '" class="nav-link ' . $active . '"><i class="nav-icon ' . $val->icon . '"></i><p>' . $val->name . '</p></a>';
+                    $body[$val->root] .= '</li>';
+                }
             }
+            $html .= $header[$value->id] . $body[$value->id];
         }
 
         return $html;

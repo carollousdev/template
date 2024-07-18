@@ -1,4 +1,5 @@
 <?php if (isset($_SESSION['id'])) header("location: " . base_url() . ""); ?>
+<?php if (isset($_SESSION['username'])) header("location: dashboard"); ?>
 <!DOCTYPE html>
 <html lang="en">
 
