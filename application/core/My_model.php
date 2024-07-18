@@ -182,16 +182,19 @@
         {
             $result = "";
             $method = array_merge(['edit', 'delete'], $this->method);
-            $result .= '<div class="btn-group">';
+            $button = '';
+            $i = 0;
             foreach ($method as $key => $value) {
                 if (!empty($this->data[$value . '_permission'])) {
-                    $result .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
-                    $result .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
-                    $result .= '<button data-id="' . $id . '" class="mr-1 btn btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
-                    $result .= '</form>';
+                    $button .= '<form action="http://localhost:8080/template/' . $this->table . '/' . $value . '" method="post" accept-charset="utf-8">';
+                    $button .= '<input type="hidden" name="id", id="id", value="' . $id . '">';
+                    $button .= '<button data-id="' . $id . '" class="btn btn-block btn-' . $this->button[$value] . ' ' . $value . ' form-group">' . ucwords($value) . '</button>';
+                    $button .= '</form>';
+                    $i++;
                 }
             }
-            $result .= '</div>';
+            $i > 1 ? $x = 'btn-group' : $x = '';
+            $result = '<div class="' . $x . '">' . $button . '</div>';
 
             return $result;
         }

@@ -4,7 +4,7 @@ var columnDefsVal = [
 	{
 		targets: -1,
 		visible: true,
-		width: '100px'
+		width: '40px'
 	}
 ];
 
