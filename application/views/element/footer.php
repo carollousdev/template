@@ -18,6 +18,15 @@
 <script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/dataTables.fixedColumns.js"></script>
 <script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/fixedColumns.bootstrap5.js"></script>
 
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/dataTables.buttons.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/buttons.bootstrap5.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/jszip.min.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/pdfmake.min.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/vfs_fonts.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/bootstrap5/js/buttons.html5.min.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/buttons.print.min.js"></script>
+<script src="http://localhost:8080/template/plugins/datatables/include/bootstrap5/js/buttons.colVis.min.js"></script>
+
 <script src="http://localhost:8080/template/plugins/select2/js/select2.min.js"></script>
 
 <!-- AdminLTE -->

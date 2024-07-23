@@ -9,9 +9,11 @@
 
     <link rel="icon" type="image/x-icon" href="http://localhost:8080/template/dist/img/pelindo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
+
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/datatables/bootstrap5/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/datatables/bootstrap5/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="http://localhost:8080/template/plugins/datatables/bootstrap5/css/buttons.bootstrap5.css">
+
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="http://localhost:8080/template/plugins/select2/css/select2-bootstrap4.min.css">
 
