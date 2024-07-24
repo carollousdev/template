@@ -88,7 +88,12 @@ function showDataTables() {
 							columns: ':visible'
 						}
 					}, 'colvis']
-			}
+			},
+			topEnd: {
+				pageLength: {
+					menu: [10, 25, 50, 100, 500]
+				}
+			},
 		},
 		scrollCollapse: true,
 		scrollY: '50vh',
@@ -97,9 +102,8 @@ function showDataTables() {
 		serverSide: true,
 		autoWidth: true,
 		responsive: true,
-		info: false,
+		info: true,
 		paging: true,
-		lengthChange: true,
 		ajax: {
 			url: link + "/server_side",
 			type: "POST",
