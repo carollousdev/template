@@ -4,7 +4,6 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <?= $create_permission ?>
                 <table id="myTable" class="table table-hover" style="width:100%;">
                     <?= $hTable ?>
                 </table>
