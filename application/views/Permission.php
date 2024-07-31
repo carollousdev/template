@@ -16,6 +16,11 @@
                             <th>R</th>
                             <th>U</th>
                             <th>D</th>
+                            <th>COPY</th>
+                            <th>CSV</th>
+                            <th>EXCEL</th>
+                            <th>PDF</th>
+                            <th>PRINT</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -249,4 +249,22 @@ class CI_Template extends CI_Controller
 
         echo json_encode($option);
     }
+
+    public function check_permissions()
+    {
+        $permission = [];
+        $method = ['c', 'copyHtml5', 'csvHtml5', 'excelHtml5', 'pdfHtml5', 'print'];
+        $navigation = $this->navigation->get(['link' => $this->data['path'], 'status' => 0]);
+        // if (!empty($this->permissions->get(['role' => $_SESSION['role'], 'navigation' => $navigation->id, 'c' => 1, 'status' => 0]))) {
+        //     $permission['create'] = 1;
+        // } else $permission['create'] = 0;
+
+        foreach ($method as $key => $value) {
+            if (!empty($this->permissions->get(['role' => $_SESSION['role'], 'navigation' => $navigation->id, $value => 1, 'status' => 0]))) {
+                $permission[$value] = 1;
+            } else $permission[$value] = 0;
+        }
+
+        echo json_encode($permission);
+    }
 }

@@ -15,7 +15,7 @@ class Role extends CI_Template
         $this->data['result'] = "";
         $this->data['id'] = $_POST['id'];
         $navigation = $this->navigation->gets(['type' => 0, 'status' => 0]);
-        $method = ['c', 'r', 'u', 'd'];
+        $method = ['c', 'r', 'u', 'd', 'copyHtml5', 'csvHtml5', 'excelHtml5', 'pdfHtml5', 'print'];
         $data = [];
         $dumm = [];
         $redirect = false;
