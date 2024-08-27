@@ -187,7 +187,7 @@ function actionlink(param) {
 		return {
 			text: 'Create',
 			action: function () {
-				window.location.href = "http://localhost:8080/template/" + link + "/" + param;
+				window.location.href = "http://localhost:8080/template/" + link + "/" + "create";
 			}
 		}
 	} else {
