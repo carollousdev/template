@@ -368,7 +368,7 @@
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         } else {
                             !empty(set_value($name)) ? $valuekey = set_value($name) : $valuekey = $sql->$name;
-                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . $valuekey . '" required>';
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . $valuekey . '">';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         }
                         $result .= '</div>';

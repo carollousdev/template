@@ -10,10 +10,11 @@ class Navigation_model extends My_model
         $this->table = "navigation";
 
         $this->rules = [
-            'icon' => 'trim',
             'link' => 'trim|required',
             'type' => 'trim|required',
-            'root' => 'trim|required'
+            'root' => 'trim|required',
+            'urutan' => 'is_unique[navigation.urutan]',
+            'icon' => 'trim',
         ];
         $this->change_value = ['type' => ['Root', 'Master', 'Singe']];
         $this->option_where = ['root' => ['type' => 0]];
