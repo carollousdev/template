@@ -133,7 +133,7 @@ class CI_Template extends CI_Controller
             if (count($_POST) > 1) {
                 foreach ($this->master->get_field_original() as $key => $value) {
                     if (!in_array($value, ['id', 'username', 'action'])) {
-                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
+                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value), array('rule1' => 'You testing'));
                     } else {
                         if ($value == 'username') {
                             $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));

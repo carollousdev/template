@@ -13,7 +13,13 @@ class Navigation_model extends My_model
             'link' => 'trim|required',
             'type' => 'trim|required',
             'root' => 'trim|required',
-            'urutan' => 'is_unique[navigation.urutan]',
+            'urutan' => [
+                'rule1' => function ($value) {
+                    if ($value == 15) {
+                        return false;
+                    }
+                }
+            ],
             'icon' => 'trim',
         ];
         $this->change_value = ['type' => ['Root', 'Master', 'Singe']];
