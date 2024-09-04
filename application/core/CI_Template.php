@@ -1,6 +1,7 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+
 class CI_Template extends CI_Controller
 {
 
@@ -154,18 +155,7 @@ class CI_Template extends CI_Controller
                 $data['id'] = $this->master->getLastId();
                 $data = array_merge($data, $_POST);
                 if ($this->master->create($data)) {
-                    $d = date("D, d-m-y");
-                    if (file_exists("logs/" . $d . ".txt") == 1) {
-                        $myfile = fopen("logs/" . $d . ".txt", "a") or die("Unable to open file!");
-                        $content = ucfirst($this->user->get(['username' => $_SESSION['username']])->name) . " has created " . $data['name'] . "\n";
-                        fwrite($myfile, $content);
-                        fclose($myfile);
-                    } else {
-                        $content = ucfirst($this->user->get(['username' => $_SESSION['username']])->name) . " has created " . $data['name'];
-                        $fp = fopen("logs/" . $d . ".txt", "wb");
-                        fwrite($fp, $content);
-                        fclose($fp);
-                    }
+                    $this->format->log($data['name'], $this->data['path']);
                     redirect($this->data['path'], 'refresh');
                 }
             }
