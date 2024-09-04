@@ -155,7 +155,7 @@ class CI_Template extends CI_Controller
                 $data['id'] = $this->master->getLastId();
                 $data = array_merge($data, $_POST);
                 if ($this->master->create($data)) {
-                    $this->format->log($data['name'], $this->data['path']);
+                    $this->format->log($data['name'], $this->data['path'], 'create');
                     redirect($this->data['path'], 'refresh');
                 }
             }
