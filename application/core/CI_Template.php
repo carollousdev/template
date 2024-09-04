@@ -212,8 +212,8 @@ class CI_Template extends CI_Controller
     public function delete()
     {
         if (!empty($this->data['delete_permission']) && !empty($this->data['id'])) {
-            if ($this->master->delete(['id' => $this->encrypt->decode($this->data['id'])])) {
-                if ($this->format->log("", $this->data['path'], 'delete')) {
+            if ($this->format->log("", $this->data['path'], 'delete', $this->data['id'])) {
+                if ($this->master->delete(['id' => $this->encrypt->decode($this->data['id'])])) {
                     redirect($this->data['path'], 'refresh');
                 }
             }

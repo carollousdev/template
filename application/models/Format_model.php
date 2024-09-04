@@ -27,13 +27,15 @@ class Format_model extends CI_Model
             $content = "[" . $count . "] " . ucfirst($method) . $x . $name . $x . "of " . ucfirst($path) . $y . $user . $y . $date . $x . $time . $x . $z . "\n";
         } else {
             $query =  $this->$path->get(['id' => $this->encrypt->decode($id), 'status' => 0]);
-            $content = "[" . $count . "] " . ucfirst($method) . $x;
-            foreach ($data as $key => $value) {
-                if ($value !== $query->$key && $key !== 'id') {
-                    $content .= $query->$key . $x . "change to" . $x . $value . $x;
+            if ($method == 'edit') {
+                $content = "[" . $count . "] " . ucfirst($method) . $x;
+                foreach ($data as $key => $value) {
+                    if ($value !== $query->$key && $key !== 'id') {
+                        $content .= $query->$key . $x . "change to" . $x . $value . $x;
+                    }
                 }
-            }
-            $content .= "of " . ucfirst($path) . $y . $user . $y . $date . $x . $time . $x . $z . "\n";
+                $content .= "of " . ucfirst($path) . $y . $user . $y . $date . $x . $time . $x . $z . "\n";
+            } else $content = "[" . $count . "] " . ucfirst($method) . $x . $query->name . $x . "of " . ucfirst($path) . $y . $user . $y . $date . $x . $time . $x . $z . "\n";
         }
 
         fwrite($myfile, $content);
