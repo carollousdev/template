@@ -155,8 +155,9 @@ class CI_Template extends CI_Controller
                 $data['id'] = $this->master->getLastId();
                 $data = array_merge($data, $_POST);
                 if ($this->master->create($data)) {
-                    $this->format->log($data['name'], $this->data['path'], 'create');
-                    redirect($this->data['path'], 'refresh');
+                    if ($this->format->log($data['name'], $this->data['path'], 'create')) {
+                        redirect($this->data['path'], 'refresh');
+                    }
                 }
             }
 
@@ -196,8 +197,10 @@ class CI_Template extends CI_Controller
                 }
                 $data = array_merge($data, $_POST);
                 unset($data['id']);
-                if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
-                    redirect($this->data['path'], 'refresh');
+                if ($this->format->log('', $this->data['path'], 'edit', $this->data['id'], $_POST) == true) {
+                    if ($this->master->edit($data, ['id' => $this->encrypt->decode($this->data['id'])])) {
+                        redirect($this->data['path'], 'refresh');
+                    }
                 }
             }
 
@@ -210,6 +213,7 @@ class CI_Template extends CI_Controller
     {
         if (!empty($this->data['delete_permission']) && !empty($this->data['id'])) {
             if ($this->master->delete(['id' => $this->encrypt->decode($this->data['id'])])) {
+                $this->format->log("", $this->data['path'], 'delete');
                 redirect($this->data['path'], 'refresh');
             }
         } else redirect($this->data['path'], 'refresh');
