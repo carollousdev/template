@@ -308,6 +308,9 @@
                         } else if ($value->name == 'email') {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="email" value="' . set_value($value->name) . '" required>';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
+                        } else if ($value->type == 'int') {
+                            $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="number" value="' . set_value($value->name) . '">';
+                            $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
                         } else {
                             $result .= '<input id="' . $value->name . '" name="' . $value->name . '" class="form-control ' . $isError . '" type="text" value="' . set_value($value->name) . '">';
                             $result .=  form_error($value->name, '<div class="error invalid-feedback">', '</div>');
