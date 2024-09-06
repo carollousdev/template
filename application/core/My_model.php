@@ -201,7 +201,11 @@
 
         public function validate_config($key)
         {
-            !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'required';
+            if ($key == 'name') {
+                $result = 'required|is_unique[' . $this->table . '.name]';
+            } else {
+                !empty($this->rules[$key]) ? $result = $this->rules[$key] : $result = 'required';
+            }
             return $result;
         }
 
