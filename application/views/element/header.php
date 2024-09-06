@@ -26,8 +26,8 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
+        <!-- <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+
             <ul class="navbar-nav">
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="dashboard" class="nav-link">Home</a>
@@ -36,14 +36,14 @@
                     <a href="#" class="nav-link">Documentation</a>
                 </li>
             </ul>
-            <!-- Right navbar links -->
+
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url() . 'logout' ?>">
                         <i class="fas fa-solid fa-lock"></i> Logout</a>
                 </li>
             </ul>
-        </nav>
+        </nav> -->
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="dashboard" class="brand-link">
@@ -87,12 +87,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Data <?= $path ?></h1>
+                            <h1 class="m-0"><?= $path !== 'Dashboard' ? "Data " . ucfirst($path) : "" ?></h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="<?= base_url() . 'dashboard' ?>">Home</a></li>
-                                <li class="breadcrumb-item active"><?= $path ?></li>
+                                <li class="breadcrumb-item active"><?= ucfirst($path) ?></li>
                             </ol>
                         </div>
                     </div>
