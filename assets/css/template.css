@@ -29,3 +29,14 @@ tr.highlight {
 	font-size: 80%;
 	color: #dc3545;
 }
+
+.scroll-container {
+	height: 70vh;
+	width: 100%;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.scroll-container:hover {
+	overflow-y: scroll;
+}

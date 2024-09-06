@@ -74,7 +74,9 @@
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-                        <?= $sidebar ?>
+                        <div class="scroll-container">
+                            <?= $sidebar ?>
+                        </div>
                     </ul>
                 </nav>
                 <nav class="mt-2" style="position: absolute;bottom: 0;">

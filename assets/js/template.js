@@ -128,7 +128,7 @@ function showDataTables(buttonadds, permissionPDF) {
 			]
 		},
 		scrollCollapse: true,
-		scrollY: '52vh',
+		scrollY: '40vh',
 		scrollX: '100%',
 		processing: true,
 		serverSide: true,

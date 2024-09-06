@@ -38,7 +38,7 @@ class Navigation_model extends My_model
                     $header[$val->root] = '<li class="nav-header">' . strtoupper($value->name) . '</li>';
                     $val->link == $this->data['path'] ? $active = 'active' : $active = "";
                     $body[$val->root] .= '<li class="nav-item">';
-                    $body[$val->root] .= '<a href="' . base_url() . $val->link . '" class="nav-link ' . $active . '"><i class="nav-icon ' . $val->icon . '"></i><p>' . $val->name . '</p></a>';
+                    $body[$val->root] .= '<a href="' . base_url() . $val->link . '" class="nav-link ' . $active . '"><i class="nav-icon ' . $val->icon . '"></i><p>&nbsp&nbsp' . $val->name . '</p></a>';
                     $body[$val->root] .= '</li>';
                 }
             }
