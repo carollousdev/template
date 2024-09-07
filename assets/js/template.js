@@ -1,5 +1,10 @@
+var host = 'http://localhost:8080/template/';
 var parts = window.location.pathname.split("/");
 var link = parts[parts.length - 1];
+
+var url = host + parts[parts.length - 2];
+
+
 var d = new Date();
 var strDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
 var buttonCreate;
@@ -14,6 +19,23 @@ var columnDefsVal = [
 ];
 
 
+$('select').on('change', function (e) {
+	// $.ajax({
+	// 	url: link + "/testingoption",
+	// 	type: 'POST',
+	// 	data: {
+	// 		id: 'masuk',
+	// 		data: {
+	// 			tipe: this.id,
+	// 			value: this.value
+	// 		}
+	// 	},
+	// 	dataType: "JSON",
+	// 	success: function (data) {
+	// 		console.log(data);
+	// 	},
+	// });
+});
 
 $.ajax({
 	url: link + "/check_permissions",
@@ -155,7 +177,7 @@ function call_option(i) {
 function myFunction(item, index) {
 	$("#" + item).select2({
 		ajax: {
-			url: 'http://localhost:8080/template/navigation/getOption',
+			url: url + '/getOption',
 			dataType: 'json',
 			type: "GET",
 			quietMillis: 100,
