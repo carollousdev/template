@@ -13,13 +13,11 @@ class Navigation_model extends My_model
             'link' => 'trim|required',
             'type' => 'trim|required',
             'root' => 'trim|required',
-            'urutan' => [
-                'rule1' => function ($value) {
-                    if ($value == 15) {
-                        return false;
-                    }
+            'urutan' => array('checkurutan_callback', function ($str) {
+                if (!empty($this->navigation->get(['type' => $_POST['type'], 'root' => $_POST['root'], 'urutan' => $_POST['urutan']]))) {
+                    return true;
                 }
-            ],
+            }),
             'icon' => 'trim',
         ];
         $this->change_value = ['type' => ['Root', 'Master', 'Singe']];

@@ -18,11 +18,13 @@ class CI_Template extends CI_Controller
         parent::__construct();
         $this->load->library(['encrypt', 'encryption', 'form_validation', 'user_agent', 'session']);
 
+
         $this->data = $_POST;
         $this->get = $_GET;
         $this->data['option'] = array();
         $this->data['path'] = $path;
         $this->data['js'] = '';
+        $this->data['rules'] = array();
         $this->page_info = $page_info;
 
         $this->get['term'] = "";
@@ -134,7 +136,7 @@ class CI_Template extends CI_Controller
             if (count($_POST) > 1) {
                 foreach ($this->master->get_field_original() as $key => $value) {
                     if (!in_array($value, ['id', 'username', 'action'])) {
-                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value), array('rule1' => 'You testing'));
+                        $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value), $this->data['rules']);
                     } else {
                         if ($value == 'username') {
                             $this->form_validation->set_rules($value, strtoupper($value), $this->master->validate_config($value));
