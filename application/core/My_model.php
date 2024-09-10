@@ -273,13 +273,8 @@
             $result = "";
             $get_field_form = $this->master->get_field_form();
             $fields = $this->db->field_data($this->table);
-            if (count($get_field_form) == 5) {
-                $col = 'col-2';
-            } else if (count($fields) % 4 == 0) {
-                $col = 'col-3';
-            } else if (count($fields) % 3  == 0) {
-                $col = 'col-4';
-            } else $col = 'col-6';
+            $col = $this->form->col($get_field_form);
+
             foreach ($fields as $key => $value) {
                 if (in_array($value->name, $get_field_form) && $value->name !== 'id') {
                     in_array($value->name, $error) ? $isError = 'is-invalid' : $isError = '';
